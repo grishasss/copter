@@ -13,6 +13,7 @@
 
 
 Adafruit_MPU6050 mpu;
+Adafruit_HMC5883_Unified mag;
 
 float get_voltage(){
     return (analogRead(A0)) / 1024 * (R1 + R2) / R2;    
@@ -26,6 +27,7 @@ float get_voltage(){
 void setup() {
    Serial.begin(115200);
    bool mpu_begin = mpu.begin();
+   bool mag = mag.begin();
    
 }
 
