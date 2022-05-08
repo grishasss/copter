@@ -12,13 +12,9 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-<<<<<<< HEAD
             "executable": "c:/Users/Byte-PC/Documents/PlatformIO/Projects/copter/.pio/build/esp12e/firmware.elf",
-=======
-            "executable": "/home/grisha/Документы/PlatformIO/Projects/copter/.pio/build/esp12e/firmware.elf",
->>>>>>> 14d35ee5c1ba13d184c0a39b1ca57c8469ea6760
             "projectEnvName": "esp12e",
-            "toolchainBinDir": "/home/grisha/.platformio/packages/toolchain-xtensa/bin",
+            "toolchainBinDir": "C:/Users/Byte-PC/.platformio/packages/toolchain-xtensa/bin",
             "internalConsoleOptions": "openOnSessionStart",
             "preLaunchTask": {
                 "type": "PlatformIO",
@@ -29,26 +25,18 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-<<<<<<< HEAD
             "executable": "c:/Users/Byte-PC/Documents/PlatformIO/Projects/copter/.pio/build/esp12e/firmware.elf",
-=======
-            "executable": "/home/grisha/Документы/PlatformIO/Projects/copter/.pio/build/esp12e/firmware.elf",
->>>>>>> 14d35ee5c1ba13d184c0a39b1ca57c8469ea6760
             "projectEnvName": "esp12e",
-            "toolchainBinDir": "/home/grisha/.platformio/packages/toolchain-xtensa/bin",
+            "toolchainBinDir": "C:/Users/Byte-PC/.platformio/packages/toolchain-xtensa/bin",
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (without uploading)",
-<<<<<<< HEAD
             "executable": "c:/Users/Byte-PC/Documents/PlatformIO/Projects/copter/.pio/build/esp12e/firmware.elf",
-=======
-            "executable": "/home/grisha/Документы/PlatformIO/Projects/copter/.pio/build/esp12e/firmware.elf",
->>>>>>> 14d35ee5c1ba13d184c0a39b1ca57c8469ea6760
             "projectEnvName": "esp12e",
-            "toolchainBinDir": "/home/grisha/.platformio/packages/toolchain-xtensa/bin",
+            "toolchainBinDir": "C:/Users/Byte-PC/.platformio/packages/toolchain-xtensa/bin",
             "internalConsoleOptions": "openOnSessionStart",
             "loadMode": "manual"
         }
