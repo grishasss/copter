@@ -1,5 +1,7 @@
 #include <Arduino.h>
-#include <Wire.h>
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_HMC5883_U.h>
 
 
 
