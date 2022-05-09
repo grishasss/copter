@@ -8,6 +8,8 @@
 #include "math_copter.h"
 #include "web.h"
 #include "sensors.h"
+#include "motor.h"
+
 
 
 Copter::Copter(){
