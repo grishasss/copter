@@ -14,3 +14,8 @@ void MOTORS::stop_all(){
 void MOTORS::set_power_to(int MOTOR_ID , int Power){
     power[MOTOR_ID] = Power;
 }
+
+void MOTORS::set_power_all(int Power[])
+{
+    
+}

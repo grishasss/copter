@@ -15,6 +15,7 @@ class MOTORS{
     
     void stop_all();
     void stop(int MOTOR_ID);
-    void set_power_to(int MOTOR_ID , int power);
+    void set_power_to(int MOTOR_ID , int Power);    
+    void set_power_all(int Power[]);
 
 };
