@@ -11,7 +11,14 @@
 
 
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
-    return;
+    if(type == WStype_CONNECTED){
+        Serial.println("WebSocket is Connected");
+        return;
+    }
+    if(type == WStype_DISCONNECTED){
+        Serial.println("WebSocket is Disonnected");
+        return;
+    }
 }
 
 
