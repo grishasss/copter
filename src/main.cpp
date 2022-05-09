@@ -3,7 +3,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 #include "Adafruit_VL53L0X.h"
-
+#include <EEPROM.h>
 #include <FS.h>
 #include <WiFiUdp.h>
 #include <ESP8266WiFi.h>
@@ -71,20 +71,35 @@ bool start_lox(){
 
 
 
+String file_name; 
 
+
+void INIT(){
+    Serial.begin(115200);
+    SPIFFS.begin();
+    EEPROM.begin(1024);
+    pinMode(A0, INPUT);
+    WiFi.softAP("efs", "12345678");
+    bool is_mpu_begin = start_mpu();
+    bool is_mag_begin = start_mag();
+    bool is_lox_begin = start_lox();
+    start_WebSocket();
+}
+
+void write_in_file(){
+
+}
 
 
 
 
 void setup() {
-    Serial.begin(115200);
-    WiFi.softAP("efs", "12345678");
-    
-    bool is_mpu_begin = start_mpu();
-    bool is_mag_begin = start_mag();
-    bool is_lox_begin = start_lox();
-    
-    start_WebSocket();
+    INIT();
+
+    int num_file = EEPROM.read(0);
+    EEPROM.write(0 , num_file + 1);
+    EEPROM.commit();
+    file_name =String(num_file) + ".csv";
     
 
 }
