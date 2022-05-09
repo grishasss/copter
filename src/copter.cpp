@@ -9,6 +9,7 @@
 #include "web.h"
 #include "sensors.h"
 #include "motor.h"
+#include "logger.h"
 
 
 
@@ -20,6 +21,7 @@ Copter::Copter(){
 String file_name; 
 SENSORS sensors;
 WEB web;
+LOG Log;
 
 void INIT(){
     Serial.begin(115200);
@@ -40,4 +42,5 @@ void Copter::begin(){
 
 void Copter::process(){
     web.loop();
+    Log.loop();
 }
