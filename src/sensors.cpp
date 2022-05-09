@@ -11,10 +11,16 @@ SENSORS::SENSORS(){
     
 }
 
-
+void SENSORS::begin(){
+    pinMode(A0, INPUT);
+    start_mpu();
+    start_mag();
+    start_lox();
+}
 
 bool SENSORS::start_mpu(){
     if(mpu.begin()){
+        is_mpu_begin = 1;
         Serial.println("MPU is OK");
         return true;
     }
@@ -24,7 +30,9 @@ bool SENSORS::start_mpu(){
 
 bool SENSORS::start_mag(){
     if(mag.begin()){
+        is_mag_begin = 1;
         Serial.println("MAG is OK");
+        return true;
     }
     Serial.println("MAG is FAILD");
     return false;
@@ -32,6 +40,7 @@ bool SENSORS::start_mag(){
 
 bool SENSORS::start_lox(){
     if(mpu.begin()){
+        is_lox_begin = 1;
         Serial.println("LOX is OK");
         return true;
     }

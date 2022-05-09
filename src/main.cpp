@@ -1,8 +1,6 @@
 #include "copter.h"
 
 
-
-
 Copter mycopter;
 
 

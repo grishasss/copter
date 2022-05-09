@@ -26,6 +26,11 @@ public:
     bool start_mag();
     bool start_lox();
 
+    bool is_mpu_begin;
+    bool is_mag_begin;
+    bool is_lox_begin;
+
+    void begin();
     float get_voltage();
 
 };

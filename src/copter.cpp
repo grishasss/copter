@@ -22,12 +22,7 @@ void INIT(){
     Serial.begin(115200);
     SPIFFS.begin();
     EEPROM.begin(512);
-    pinMode(A0, INPUT);
-    // WiFi.softAP("efs", "12345678");
-    bool is_mpu_begin = sensors.start_mpu();
-    bool is_mag_begin = sensors.start_mag();
-    bool is_lox_begin = sensors.start_lox();
-    
+    sensors.begin();
 }
 
 
