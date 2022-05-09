@@ -17,6 +17,7 @@ Copter::Copter(){
 
 String file_name; 
 SENSORS sensors;
+WEB web;
 
 void INIT(){
     Serial.begin(115200);
@@ -31,10 +32,10 @@ void Copter::begin(){
     byte num_file = EEPROM.read(0);
     EEPROM.write(0 , num_file + 1);
     EEPROM.commit();
-    file_name =String(num_file) + ".csv";
+    file_name = String(num_file) + ".csv";
 }
 
 
 void Copter::process(){
-
+    web.loop();
 }

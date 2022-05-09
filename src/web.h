@@ -8,6 +8,15 @@
 #include <WebSocketsServer.h>
 
 
+#define TIME_ON_CONNECT 10000
+const String HOME_SSID = "OpenWrtHome";
+const String HOME_PASSWORD = "cuprum22";
+const String AP_SSID = "efs";
+const String AP_PASSWORD = "12345678";
+
+
+
+
 class WEB{
 public:
     WEB();
@@ -17,6 +26,7 @@ public:
 
      
     void start_WebSocket();
-    
+    void loop();
+    void wifi_init();
 };
 
