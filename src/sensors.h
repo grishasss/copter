@@ -10,6 +10,10 @@
 #define R2 1000
 
 
+// #define interval_sensors 100;
+#define num_set_zero 10
+#define pi  3.14
+#define G 9.81
 class SENSORS{
 public:
 
@@ -20,7 +24,13 @@ public:
     Adafruit_HMC5883_Unified mag;
     Adafruit_VL53L0X lox;
 
+    float kren , tangage , yaw;
+    float v_kren , v_tangage , v_yaw;
+    
+    float altitude;
+    float voltage;
 
+    long time_last_update = 0;
 
     bool start_mpu();
     bool start_mag();
@@ -32,5 +42,8 @@ public:
 
     void begin();
     float get_voltage();
-
+    void loop();
+    void mpu_set_zero();
+    void mpu_calibrate(); // tmp not avibale
+    float get_altitude(); // tmp not avibale
 };

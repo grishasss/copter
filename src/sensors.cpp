@@ -51,3 +51,44 @@ bool SENSORS::start_lox(){
 float SENSORS::get_voltage(){
     return (analogRead(A0)) / 1024 * (R1 + R2) / R2;    
 }
+void SENSORS::mpu_set_zero(){
+    sensors_event_t a, g, temp;
+    float srX = 0 , srY  = 0;
+    for(int count = 0 ; count < num_set_zero ; count++){
+        mpu.getEvent(&a, &g, &temp);
+        srX+=a.acceleration.x;
+        srY+=a.acceleration.y;
+        delay(150);
+    }
+    srX /= num_set_zero;
+    srY /= num_set_zero;
+    tangage = acos(srX / G) - pi / 2;
+    kren = acos(srY / G) - pi / 2;
+    yaw = 0;
+    time_last_update = millis();
+    v_kren = g.gyro.y;
+    v_tangage = g.gyro.x;
+    v_yaw = g.gyro.z;
+}
+
+float SENSORS::get_altitude(){
+    return 0;
+}
+
+
+void SENSORS::loop(){
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
+    tangage += (v_tangage + g.gyro.x) / 2 * (millis() - time_last_update) / 1000;
+    kren += (v_kren + g.gyro.y) / 2 * (millis() - time_last_update) / 1000;
+    yaw += (v_yaw + g.gyro.z) / 2 * (millis() - time_last_update) / 1000;
+    v_tangage = g.gyro.x;
+    v_kren = g.gyro.y;
+    v_yaw = g.gyro.z;
+    time_last_update = millis();
+    voltage = get_voltage();
+    altitude = get_altitude();
+}
+
+
+
