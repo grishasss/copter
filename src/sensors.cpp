@@ -70,7 +70,6 @@ void SENSORS::mpu_set_zero(){
     v_tangage = g.gyro.x;
     v_yaw = g.gyro.z;
 }
-
 float SENSORS::get_altitude(){
     return 0;
 }

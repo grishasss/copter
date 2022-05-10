@@ -33,10 +33,7 @@ void INIT(){
 
 void Copter::begin(){
     INIT();
-    byte num_file = EEPROM.read(0);
-    EEPROM.write(0 , num_file + 1);
-    EEPROM.commit();
-    file_name = String(num_file) + ".csv";
+    
 }
 
 
