@@ -10,12 +10,12 @@ class MOTORS{
     public:
     ESP8266_PWM ISR_PWM;
     MOTORS();
-    int power[5];
+    int16_t power[5];
     
     
     void stop_all();
     void stop(int MOTOR_ID);
-    void set_power_to(int MOTOR_ID , int Power);    
-    void set_power_all(int Power[]);
+    void set_power_to(int MOTOR_ID , int16_t Power);    
+    void set_power_all(int16_t Power[]);
 
 };

@@ -12,7 +12,7 @@
 
 // #define interval_sensors 100;
 #define num_set_zero 10
-#define pi  3.14
+#define pi 3.14
 #define G 9.81
 class SENSORS{
 public:
@@ -30,7 +30,7 @@ public:
     float altitude;
     float voltage;
 
-    long time_last_update = 0;
+    int32_t time_last_update = 0;
 
     bool start_mpu();
     bool start_mag();
