@@ -10,7 +10,7 @@
 
 
 
-void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
+void WEB::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
     if(type == WStype_CONNECTED){
         Serial.println("WebSocket is Connected");
         return;
@@ -18,6 +18,10 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
     if(type == WStype_DISCONNECTED){
         Serial.println("WebSocket is Disonnected");
         return;
+    }
+    for(int i = 0 ; i  < 8 ; i+=2){
+        Math->state_joy[i >> 1] = payload[i + 1];
+        Math->state_joy[i >> 1] |= (payload[i + 1] << 8);
     }
 }
 
@@ -28,9 +32,11 @@ WEB::WEB() : server(80) , webSocket(81) {
 }
 
 void WEB::start_WebSocket() {
-    webSocket.begin();                         
-    webSocket.onEvent(webSocketEvent);
+    webSocket.begin();               
+    // std::function<void(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght)> fn = &webSocketEvent;           
+    webSocket.onEvent( std::bind(&WEB::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4) );
     Serial.println("WebSocket server started.");
+   
 }
 
 void WEB::loop(){

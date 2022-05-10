@@ -5,7 +5,7 @@
 
 
 
-#include "math_copter.h"
+// #include "math_copter.h"
 #include "web.h"
 #include "sensors.h"
 #include "motor.h"
@@ -20,14 +20,16 @@ Copter::Copter(){
 
 String file_name; 
 SENSORS sensors;
-WEB web;
-LOG Log;
 
+LOG Log;
+MATH math;
+WEB web;
 void INIT(){
     Serial.begin(115200);
     SPIFFS.begin();
     EEPROM.begin(512);
     sensors.begin();
+    web.Math = &math;
 }
 
 
