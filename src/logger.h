@@ -13,5 +13,4 @@ class LOG{
 
     void write();
     void loop();
-    
 };
