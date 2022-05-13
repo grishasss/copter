@@ -13,8 +13,11 @@ void MOTORS::stop_all(){
 }
 void MOTORS::set_power_to(int8_t MOTOR_ID , int16_t Power){
     power[MOTOR_ID] = Power;
+    
 }
 
 void MOTORS::set_power_all(int16_t Power[]){
-
+    for(int8_t i = 0; i < 4; i++){
+        set_power_to(i , Power[i]);
+    }
 }

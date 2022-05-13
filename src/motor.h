@@ -10,7 +10,7 @@ class MOTORS{
     public:
     ESP8266_PWM ISR_PWM;
     MOTORS();
-    int16_t power[5];
+    int16_t power[4];
     
     
     void stop_all();
