@@ -33,8 +33,7 @@ WEB::WEB() : server(80) , webSocket(81) {
 
 void WEB::start_WebSocket() {
     webSocket.begin();               
-    // std::function<void(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght)> fn = &webSocketEvent;           
-    webSocket.onEvent( std::bind(&WEB::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4) );
+     webSocket.onEvent( std::bind(&WEB::webSocketEvent, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4) );
     Serial.println("WebSocket server started.");
    
 }
@@ -75,7 +74,6 @@ void WEB::wifi_init(){
         Serial.print("IP address:\t");
         Serial.println(WiFi.softAPIP());
     }
-
 }
 
 

@@ -70,8 +70,11 @@ void SENSORS::mpu_set_zero(){
     v_tangage = g.gyro.x;
     v_yaw = g.gyro.z;
 }
+
 float SENSORS::get_altitude(){
-    return 0;
+    VL53L0X_RangingMeasurementData_t measure;
+    lox.rangingTest(&measure, false);
+    return measure.RangeMilliMeter;
 }
 
 
