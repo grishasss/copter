@@ -6,10 +6,14 @@
 
 
 #include "math_copter.h"
+#include "logger.h"
+
+
 #include <WiFiUdp.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
+
 
 
 
@@ -29,7 +33,7 @@ public:
     ESP8266WebServer server;
     WebSocketsServer webSocket;
     MATH *Math;
-     
+    LOG *Log; 
     void start_WebSocket();
     void loop();
     void wifi_init();

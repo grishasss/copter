@@ -90,6 +90,13 @@ void SENSORS::loop(){
     time_last_update = millis();
     voltage = get_voltage();
     altitude = get_altitude();
+    math->altitude = altitude;
+    math->v_kren = v_kren;
+    math->v_yaw = v_yaw;
+    math->v_tangage = v_tangage;
+    math->tangage = tangage;
+    math->yaw = yaw;
+    math->kren = kren;    
 }
 
 

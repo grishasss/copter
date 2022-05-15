@@ -5,6 +5,8 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 #include "Adafruit_VL53L0X.h"
+#include "math_copter.h"
+
 
 
 
@@ -21,7 +23,7 @@ public:
 
     SENSORS();
 
-
+    MATH* math;
     Adafruit_MPU6050 mpu;
     Adafruit_HMC5883_Unified mag;
     Adafruit_VL53L0X lox;
