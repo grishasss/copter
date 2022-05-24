@@ -49,5 +49,5 @@ public:
     void loop();
     void mpu_set_zero();
     void mpu_calibrate(); // tmp not avibale
-    float get_altitude(); // tmp not avibale
+    float get_altitude();
 };

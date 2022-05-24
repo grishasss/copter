@@ -7,7 +7,7 @@
 #include "Adafruit_VL53L0X.h"
 
 
-SENSORS::SENSORS(){
+SENSORS::SENSORS() : mag(12345){
     
 }
 
@@ -16,6 +16,8 @@ void SENSORS::begin(){
     start_mpu();
     start_mag();
     start_lox();
+
+    
 }
 
 bool SENSORS::start_mpu(){
