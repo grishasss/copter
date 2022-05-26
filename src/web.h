@@ -34,9 +34,11 @@ public:
     WebSocketsServer webSocket;
     MATH *Math;
     LOG *Log; 
-    void start_WebSocket();
+    void start_all_server();
     void loop();
     void wifi_init();
+    bool handleFileRead(String path);
+    void query_file();
     void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght);
 };
 

@@ -23,18 +23,22 @@ SENSORS sensors;
 
 LOG Log;
 MATH math;
-WEB web;
+// WEB web;
+WEB  web;
 void INIT(){
     Serial.begin(115200);
     SPIFFS.begin();
     EEPROM.begin(512);
+   
     sensors.begin();
-    web.Math = &math;
+    web.wifi_init();
+    web.start_all_server();
 }
 
 
 void Copter::begin(){
     INIT();
+    
     
 }
 
