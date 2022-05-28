@@ -8,6 +8,7 @@
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
 
+
 String getContentType(String filename){
   if(filename.endsWith(".htm")) return "text/html";
   else if(filename.endsWith(".html")) return "text/html";
@@ -19,17 +20,23 @@ String getContentType(String filename){
 
 
 void WEB::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
-    if(type == WStype_CONNECTED){
-        Serial.println("WebSocket is Connected");
-        return;
-    }
-    if(type == WStype_DISCONNECTED){
-        Serial.println("WebSocket is Disonnected");
-        return;
-    }
-    for(int i = 0 ; i  < 8 ; i+=2){
-        Math->state_joy[i >> 1] = payload[i + 1];
-        Math->state_joy[i >> 1] |= (payload[i + 1] << 8);
+    switch (type){
+        case WStype_CONNECTED:
+            Serial.println("WebSocket is Connected");
+            break;
+        case WStype_DISCONNECTED:
+            Serial.println("WebSocket is Disonnected");
+            break;
+        case  WStype_TEXT:
+            Serial.println("read data to server!!!");
+            Serial.write(payload, lenght);
+            // for(int i = 0 ; i  < 8 ; i+=2){
+            //     Math->state_joy[i >> 1] = payload[i + 1];
+            //     Math->state_joy[i >> 1] |= (payload[i + 1] << 8);
+            // }
+            Serial.println(num);
+            webSocket.sendTXT(num , "hi comp");
+            break;
     }
 }
 
@@ -54,16 +61,13 @@ void WEB::query_file(){
 }
 
 WEB::WEB() : server(80) , webSocket(81) {
-    // wifi_init();
-    
 
-   
 }
 
 
 
 void WEB::start_all_server() {
-    server.begin();
+    server.begin(); 
     server.onNotFound(std::bind(&WEB::query_file, this));
     Serial.println("webserver started.");
     webSocket.begin();               
@@ -103,7 +107,7 @@ void WEB::wifi_init(){
             Serial.println(WiFi.localIP()); 
         }
     }
-    if(find_home){
+    if(!find_home){
         WiFi.softAP(AP_SSID, AP_PASSWORD);
         Serial.println("AP MODE");
         Serial.print("IP address:\t");
