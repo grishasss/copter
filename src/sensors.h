@@ -31,6 +31,9 @@ public:
     float kren , tangage , yaw;
     float v_kren , v_tangage , v_yaw;
     
+
+    int8_t data[7]; // day , mounth , year , hour , minute , second , millis / 10
+
     float altitude;
     float voltage;
 
