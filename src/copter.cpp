@@ -31,6 +31,7 @@ void INIT(){
     EEPROM.begin(512);
    
     sensors.begin();
+    web.Sensors = (&sensors);
     web.wifi_init();
     web.start_all_server();
 }

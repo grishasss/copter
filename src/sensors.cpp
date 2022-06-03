@@ -64,8 +64,8 @@ void SENSORS::mpu_set_zero(){
     }
     srX /= num_set_zero;
     srY /= num_set_zero;
-    tangage = acos(srX / G) - pi / 2;
-    kren = acos(srY / G) - pi / 2;
+    tangage = acos(srX / Gg) - pi / 2;
+    kren = acos(srY / Gg) - pi / 2;
     yaw = 0;
     time_last_update = millis();
     v_kren = g.gyro.y;
@@ -101,5 +101,13 @@ void SENSORS::loop(){
     math->kren = kren;    
 }
 
+
+void SENSORS::time_recalc(){
+    int32_t now = amendment + millis();
+    date[3] = now / 1000 / 3600;
+    date[4] = now / 1000 / 60 % 60;
+    date[5] =  now / 1000 % 60;
+    date[6] = now % 1000 / 10;
+}
 
 

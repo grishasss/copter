@@ -14,10 +14,11 @@
 #define R2 1000
 
 
-// #define interval_sensors 100;
+// #define interval_sensors 100
 #define num_set_zero 10
 #define pi 3.14
-#define G 9.81
+#define Gg 9.81
+
 class SENSORS{
 public:
 
@@ -31,8 +32,8 @@ public:
     float kren , tangage , yaw;
     float v_kren , v_tangage , v_yaw;
     
-
-    int8_t data[7]; // day , mounth , year , hour , minute , second , millis / 10
+    int32_t amendment;
+    int8_t date[7]; // day , mounth , year , hour , minute , second , millis / 10
 
     float altitude;
     float voltage;
@@ -53,4 +54,6 @@ public:
     void mpu_set_zero();
     void mpu_calibrate(); // tmp not avibale
     float get_altitude();
+
+    void time_recalc();
 };

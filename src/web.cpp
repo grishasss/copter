@@ -27,15 +27,10 @@ void WEB::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t l
         case WStype_DISCONNECTED:
             Serial.println("WebSocket is Disonnected");
             break;
-        case  WStype_TEXT:
+        case  WStype_BIN:
             Serial.println("read data to server!!!");
             Serial.write(payload, lenght);
-            // for(int i = 0 ; i  < 8 ; i+=2){
-            //     Math->state_joy[i >> 1] = payload[i + 1];
-            //     Math->state_joy[i >> 1] |= (payload[i + 1] << 8);
-            // }
-            Serial.println(num);
-            webSocket.sendTXT(num , "hi comp");
+            get_command(payload , lenght);
             break;
     }
 }
@@ -117,3 +112,28 @@ void WEB::wifi_init(){
 }
 
 
+ void WEB::get_command(uint8_t * payload, size_t lenght){
+    if(lenght == 0){
+        Serial.println("Assert 1!!!");
+        return;
+    }
+    switch (payload[0]){
+    case 0:
+        Serial.println("Set global time on client");
+
+        Sensors->amendment =  (int32_t)payload[4] * 3600000 + (int32_t)payload[5] * 60000 + (int32_t)payload[6] * 1000 + (int32_t)payload[7] * 10 - millis();
+        for(int8_t i = 0 ; i < 7; i++){
+            Sensors->date[i] = payload[i + 1];
+        }
+       
+        for(int8_t i = 0 ; i < 7 ; i++){
+            Serial.println(Sensors->date[i]);
+        }
+        Serial.println("OK");
+        break;
+    
+    default:
+        Serial.println("Assert 2!!!");
+        break;
+    }
+ }

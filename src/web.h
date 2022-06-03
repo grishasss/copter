@@ -7,6 +7,7 @@
 
 #include "math_copter.h"
 #include "logger.h"
+#include "sensors.h"
 
 
 #include <WiFiUdp.h>
@@ -35,6 +36,7 @@ public:
     WebSocketsServer webSocket;
     MATH *Math;
     LOG *Log; 
+    SENSORS *Sensors;
     // WebSocketsClient clients[max_client];
     // int8_t client_number;
     void check_client();
@@ -45,5 +47,6 @@ public:
     void query_file();
     void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght);
     void send_string(String data);
+    void get_command(uint8_t * payload, size_t lenght);
 };
 

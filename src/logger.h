@@ -4,11 +4,12 @@
 #include <EEPROM.h>
 #include <FS.h>
 #include "math_copter.h"
-
+#include "sensors.h"
 class LOG{
     public:
     
     LOG();
+    SENSORS *Sensors;
     const char* header = "";
     MATH* math;
     long time_last_write = 0;
