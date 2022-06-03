@@ -1,7 +1,6 @@
 #pragma once
 
 #include<Arduino.h>
-#include <EEPROM.h>
 #include <FS.h>
 #include "math_copter.h"
 #include "sensors.h"
@@ -17,7 +16,7 @@ class LOG{
     bool is_writing = 0;
     File file;
     String file_name;
-
+    void open_file();
     void write();
     void loop();
 };

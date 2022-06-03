@@ -34,6 +34,8 @@ public:
     
     int32_t amendment;
     int8_t date[7]; // day , mounth , year , hour , minute , second , millis / 10
+    bool date_is_ccorrect = 0;
+
 
     float altitude;
     float voltage;

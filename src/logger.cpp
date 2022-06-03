@@ -3,13 +3,34 @@
 #include <EEPROM.h>
 #include <FS.h>
 
+
+
 LOG::LOG(){
-    byte num_file = EEPROM.read(0);
-    EEPROM.write(0 , num_file + 1);
-    EEPROM.commit();
-    file_name = String(num_file) + ".csv";
+    
+    
+}
+
+void LOG::open_file(){
+    
+    if(Sensors->date[0] < 10) file_name+= '0' + String(Sensors->date[0]);
+    else file_name+= String(Sensors->date[0]);
+    file_name +='.';
+    
+    if(Sensors->date[1] < 10) file_name+= '0' + String(Sensors->date[1]);
+    else file_name+= String(Sensors->date[1]);
+    file_name +='-';
+
+    if(Sensors->date[3] < 10) file_name+= '0' + String(Sensors->date[3]);
+    else file_name+= String(Sensors->date[3]);
+    file_name +=':';
+    
+    if(Sensors->date[4] < 10) file_name+= '0' + String(Sensors->date[4]);
+    else file_name+= String(Sensors->date[4]);
+    file_name +=".csv";
+
     file = SPIFFS.open("/" + file_name , "w");
-    file.write(header);
+    Serial.println("write log to: " + file_name);
+
 }
 
 void LOG::write(){
@@ -25,9 +46,11 @@ void LOG::write(){
 }
 
 void LOG::loop(){
-    if(millis() - time_last_write < interval){
-        write();
-        time_last_write = millis();
+    if(Sensors->date_is_ccorrect){
+        if(millis() - time_last_write < interval){
+            write();
+            time_last_write = millis();
+        }
     }
 
 }

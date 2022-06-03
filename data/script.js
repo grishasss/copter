@@ -15,7 +15,7 @@ function startSocket(){
       let date_time = new Int8Array(8);
       date_time[0] = 0;
       date_time[1] = DATE.getDate();
-      date_time[2] = DATE.getMonth();
+      date_time[2] = DATE.getMonth() + 1;
       date_time[3] = DATE.getYear() - 100;
       date_time[4] = DATE.getHours();
       date_time[5] = DATE.getMinutes();

@@ -32,6 +32,8 @@ void INIT(){
    
     sensors.begin();
     web.Sensors = (&sensors);
+    web.Log = (&Log);
+    Log.Sensors = (&sensors);
     web.wifi_init();
     web.start_all_server();
 }

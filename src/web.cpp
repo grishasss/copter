@@ -28,8 +28,7 @@ void WEB::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t l
             Serial.println("WebSocket is Disonnected");
             break;
         case  WStype_BIN:
-            Serial.println("read data to server!!!");
-            Serial.write(payload, lenght);
+            Serial.println("read BIN data to server!!!");
             get_command(payload , lenght);
             break;
     }
@@ -125,11 +124,10 @@ void WEB::wifi_init(){
         for(int8_t i = 0 ; i < 7; i++){
             Sensors->date[i] = payload[i + 1];
         }
-       
-        for(int8_t i = 0 ; i < 7 ; i++){
-            Serial.println(Sensors->date[i]);
+        if(!Sensors->date_is_ccorrect){
+            Sensors->date_is_ccorrect = true;
+            Log->open_file();
         }
-        Serial.println("OK");
         break;
     
     default:
