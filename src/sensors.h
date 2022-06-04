@@ -40,7 +40,7 @@ public:
     float altitude;
     float voltage;
 
-   int32_t time_last_update = 0;
+    int32_t time_last_update = 0;
 
     bool start_mpu();
     bool start_mag();

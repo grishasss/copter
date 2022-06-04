@@ -7,9 +7,9 @@
 class LOG{
     public:
     
-    LOG();
+    LOG(); 
     SENSORS *Sensors;
-    const char* header = "";
+    const char* header = "Date,voltage,altitude, \n";
     MATH* math;
     long time_last_write = 0;
     int interval = 100;

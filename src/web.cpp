@@ -23,18 +23,27 @@ String getContentType(String filename){
     size_t sz = 2;
     int8_t cnt_file = 0; 
     while(dir.next()){
-        sz = sz + 1 + dir.fileName().length();
+        File tmpf = dir.openFile("r");
+        String tec = tmpf.fullName();
+        sz = sz + 3 + tec.length();
         cnt_file++;
     }
 
     uint8_t data[sz];
-    data[0] = 0;
+    data[0] = 0; 
     data[1] = cnt_file;
     int it = 2;
     dir = SPIFFS.openDir("/log");
     while(dir.next()){
-        String tec = dir.fileName();
+        File tmpf = dir.openFile("r");
+        String tec = tmpf.fullName();
+        
+        Serial.println(tmpf.size() >> 10);
         data[it++] = tec.length();
+        data[it++] = (tmpf.size() >> 10) >> 8;
+        data[it++] = (tmpf.size() >> 10) & ((1 << 8) - 1);
+        
+
         for(uint8_t x : tec){
             data[it++] = x;
         }

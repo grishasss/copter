@@ -30,24 +30,39 @@ void LOG::open_file(){
 
     file = SPIFFS.open(file_name , "w");
     Serial.println("write log to: " + file_name);
+    file.write(header);
     file.close();
 }
 
 void LOG::write(){
     Sensors->time_recalc();
+    String T;
+    if(Sensors->date[3] < 10) T+= '0' + String(Sensors->date[3]);
+    else T+= String(Sensors->date[3]);
+    T +=':';
+    
+    if(Sensors->date[4] < 10) T+= '0' + String(Sensors->date[4]);
+    else T+= String(Sensors->date[4]);
 
-    // String cnt_h();
-    // String cnt_m((int16_t)(millis() / 1000 / 60) % 60);
-    // String cnt_s((int32_t)(millis() / 1000) % 60);
-    // if(cnt_h.length() < 2) cnt_h = "0" + cnt_h;
-    // if(cnt_m.length() < 2) cnt_m = "0" + cnt_m;
-    // if(cnt_s.length() < 2) cnt_s = "0" + cnt_s;
-    // String time = cnt_h + ":" + cnt_m + ":" + cnt_s;
+    T+=':';
+
+    if(Sensors->date[5] < 10) T+= '0' + String(Sensors->date[5]);
+    else T+= String(Sensors->date[5]);
+
+    T+=':';
+
+    if(Sensors->date[6]  < 10) T+= '0' + String(Sensors->date[6]);
+    else T+= String(Sensors->date[6]);
+    T+='0';
+    // Serial.println(T);
+    file = SPIFFS.open(file_name , "a");
+    file.print(T + '\n');
+    file.close();
 }
 
 void LOG::loop(){
     if(Sensors->date_is_ccorrect){
-        if(millis() - time_last_write < interval){
+        if(millis() - time_last_write > interval){
             write();
             time_last_write = millis();
         }

@@ -74,12 +74,12 @@ function get_command(e){
       for(let i = 0 ; i < cnt ; i++){
         let tec = "";
       
-        for(let j = it  + 1; j < it + D[it] + 1 ; j++){
+        for(let j = it  + 3; j < it + D[it] + 3 ; j++){
           tec += String.fromCharCode(D[j]);
         }
-        FILE_LIST.push({name: tec , size : 777});
+        FILE_LIST.push({name: tec , size : ((D[it + 1] << 8) + D[it + 2])});
         console.log(tec);
-        it = it + D[it] + 1;
+        it = it + D[it] + 3;
       }
     gen_file_list();
     break;
