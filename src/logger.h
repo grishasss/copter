@@ -15,8 +15,11 @@ class LOG{
     int interval = 100;
     bool is_writing = 0;
     File file;
+    bool it_big = 1;
     String file_name;
     void open_file();
-    void write();
+    void write_full();
+    void write_little();
+    
     void loop();
 };

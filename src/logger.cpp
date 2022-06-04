@@ -34,7 +34,7 @@ void LOG::open_file(){
     file.close();
 }
 
-void LOG::write(){
+void LOG::write_full(){
     Sensors->time_recalc();
     String T;
     if(Sensors->date[3] < 10) T+= '0' + String(Sensors->date[3]);
@@ -60,10 +60,15 @@ void LOG::write(){
     file.close();
 }
 
+void LOG::write_little(){
+    
+}
+
 void LOG::loop(){
     if(Sensors->date_is_ccorrect){
         if(millis() - time_last_write > interval){
-            write();
+            if(it_big)write_full();
+            else write_little();
             time_last_write = millis();
         }
     }
