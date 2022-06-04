@@ -17,12 +17,37 @@ String getContentType(String filename){
   return "text/plain";
 }
 
+ void WEB::send_file_name(){
+    Serial.println("send_file_name");
+    Dir dir = SPIFFS.openDir("/log");
+    size_t sz = 2;
+    int8_t cnt_file = 0; 
+    while(dir.next()){
+        sz = sz + 1 + dir.fileName().length();
+        cnt_file++;
+    }
 
+    uint8_t data[sz];
+    data[0] = 0;
+    data[1] = cnt_file;
+    int it = 2;
+    dir = SPIFFS.openDir("/log");
+    while(dir.next()){
+        String tec = dir.fileName();
+        data[it++] = tec.length();
+        for(uint8_t x : tec){
+            data[it++] = x;
+        }
+    }
+    Serial.println("file cnt: " + String(cnt_file));
+    webSocket.sendBIN(0 ,(const uint8_t *)data , sz);
+ }
 
 void WEB::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
     switch (type){
         case WStype_CONNECTED:
             Serial.println("WebSocket is Connected");
+            webSocket_it_connect = true;
             break;
         case WStype_DISCONNECTED:
             Serial.println("WebSocket is Disonnected");
@@ -57,8 +82,6 @@ void WEB::query_file(){
 WEB::WEB() : server(80) , webSocket(81) {
 
 }
-
-
 
 void WEB::start_all_server() {
     server.begin(); 
@@ -129,9 +152,12 @@ void WEB::wifi_init(){
             Log->open_file();
         }
         break;
-    
+    case 1:
+        send_file_name();
+        break;
     default:
         Serial.println("Assert 2!!!");
         break;
     }
  }
+

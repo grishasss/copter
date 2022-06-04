@@ -33,14 +33,14 @@ public:
     float v_kren , v_tangage , v_yaw;
     
     int32_t amendment;
-    int8_t date[7]; // day , mounth , year , hour , minute , second , millis / 10
+    uint8_t date[7]; // day , mounth , year , hour , minute , second , millis / 10
     bool date_is_ccorrect = 0;
 
 
     float altitude;
     float voltage;
 
-    int32_t time_last_update = 0;
+   int32_t time_last_update = 0;
 
     bool start_mpu();
     bool start_mag();

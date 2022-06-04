@@ -26,11 +26,11 @@ void LOG::open_file(){
     
     if(Sensors->date[4] < 10) file_name+= '0' + String(Sensors->date[4]);
     else file_name+= String(Sensors->date[4]);
-    file_name +=".csv";
+    file_name ="/log/" + file_name + ".csv";
 
-    file = SPIFFS.open("/" + file_name , "w");
+    file = SPIFFS.open(file_name , "w");
     Serial.println("write log to: " + file_name);
-
+    file.close();
 }
 
 void LOG::write(){

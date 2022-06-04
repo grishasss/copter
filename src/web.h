@@ -39,6 +39,7 @@ public:
     SENSORS *Sensors;
     // WebSocketsClient clients[max_client];
     // int8_t client_number;
+    bool webSocket_it_connect;
     void check_client();
     void start_all_server();
     void loop();
@@ -48,5 +49,6 @@ public:
     void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght);
     void send_string(String data);
     void get_command(uint8_t * payload, size_t lenght);
+    void send_file_name();
 };
 
