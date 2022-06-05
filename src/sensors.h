@@ -5,7 +5,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
 #include "Adafruit_VL53L0X.h"
-#include "math_copter.h"
+
 
 
 
@@ -24,7 +24,7 @@ public:
 
     SENSORS();
 
-    MATH* math;
+    
     Adafruit_MPU6050 mpu;
     Adafruit_HMC5883_Unified mag;
     Adafruit_VL53L0X lox;
@@ -34,12 +34,13 @@ public:
     
     int32_t amendment;
     uint8_t date[7]; // day , mounth , year , hour , minute , second , millis / 10
+    int8_t joy_state[4];
     bool date_is_ccorrect = 0;
 
 
-    float altitude;
+    int16_t altitude;
     float voltage;
-
+    int32_t time_begin_day;
     int32_t time_last_update = 0;
 
     bool start_mpu();
@@ -57,5 +58,8 @@ public:
     void mpu_calibrate(); // tmp not avibale
     float get_altitude();
 
-    void time_recalc();
+    void time_recalc_small();
+    void time_recalc_big();
+    void get_value();
+    void norm_angle(float &angle);
 };

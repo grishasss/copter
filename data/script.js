@@ -6,6 +6,16 @@ var body = document.getElementsByTagName("body")[0];
 
 ws_source = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
 
+
+function converte(e){
+  console.log(e);
+}
+
+function del(e){
+  console.log(e);
+}
+
+
 function gen_file_list(){
   var tbl = document.createElement("table");
   var tblBody = document.createElement("tbody");
@@ -46,17 +56,29 @@ function gen_file_list(){
     row.appendChild(c);
 
     c = document.createElement("td");
-    cell = document.createElement("a");
+    cell = document.createElement("button");
     cellText = document.createTextNode("delete");
-    cell.setAttribute("href" , "http://google.com");
+  
+    cell.setAttribute("onclick" , "del('"+  FILE_LIST[i].name + "')");
     cell.appendChild(cellText);
     c.appendChild(cell);
+    row.appendChild(c);
+
+    c = document.createElement("td");
+    cell = document.createElement("button");
+    cellText = document.createTextNode("converte");
+  
+    cell.setAttribute("onclick" , "converte('"+  FILE_LIST[i].name + "')");
+    cell.appendChild(cellText);
+    c.appendChild(cell);
+
+    
 
     row.appendChild(c);
     
     tblBody.appendChild(row);
   }
-  tbl.setAttribute("border", "1" );
+  // tbl.setAttribute("border", "1" );
 
 
   tbl.appendChild(tblBody);

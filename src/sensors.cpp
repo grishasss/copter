@@ -6,6 +6,10 @@
 #include <Adafruit_HMC5883_U.h>
 #include "Adafruit_VL53L0X.h"
 
+void  SENSORS::norm_angle(float &angle){
+    while(angle < 0) angle+=2*pi;
+    while(angle > 2*pi) angle-=2*pi;
+}
 
 SENSORS::SENSORS() : mag(12345){
     
@@ -16,8 +20,6 @@ void SENSORS::begin(){
     start_mpu();
     start_mag();
     start_lox();
-
-    
 }
 
 bool SENSORS::start_mpu(){
@@ -73,11 +75,7 @@ void SENSORS::mpu_set_zero(){
     v_yaw = g.gyro.z;
 }
 
-float SENSORS::get_altitude(){
-    VL53L0X_RangingMeasurementData_t measure;
-    lox.rangingTest(&measure, false);
-    return measure.RangeMilliMeter;
-}
+
 
 
 void SENSORS::loop(){
@@ -86,28 +84,32 @@ void SENSORS::loop(){
     tangage += (v_tangage + g.gyro.x) / 2 * (millis() - time_last_update) / 1000;
     kren += (v_kren + g.gyro.y) / 2 * (millis() - time_last_update) / 1000;
     yaw += (v_yaw + g.gyro.z) / 2 * (millis() - time_last_update) / 1000;
+    norm_angle(tangage);
+    norm_angle(kren);
+    norm_angle(yaw);
+    
     v_tangage = g.gyro.x;
     v_kren = g.gyro.y;
     v_yaw = g.gyro.z;
     time_last_update = millis();
     voltage = get_voltage();
-    altitude = get_altitude();
-    math->altitude = altitude;
-    math->v_kren = v_kren;
-    math->v_yaw = v_yaw;
-    math->v_tangage = v_tangage;
-    math->tangage = tangage;
-    math->yaw = yaw;
-    math->kren = kren;    
+
+    VL53L0X_RangingMeasurementData_t measure;
+    lox.rangingTest(&measure, false);
+    
+    altitude = measure.RangeMilliMeter;
+    
 }
 
 
-void SENSORS::time_recalc(){
-    int32_t now = amendment + millis();
-    date[3] = now / 1000 / 3600;
-    date[4] = now / 1000 / 60 % 60;
-    date[5] =  now / 1000 % 60;
-    date[6] = now % 1000 / 10;
+void SENSORS::time_recalc_big(){
+    time_begin_day = amendment + millis();
+    date[3] = time_begin_day / 1000 / 3600;
+    date[4] = time_begin_day / 1000 / 60 % 60;
+    date[5] =  time_begin_day / 1000 % 60;
+    date[6] = time_begin_day % 1000 / 10;
 }
 
-
+void SENSORS::time_recalc_small(){
+    time_begin_day = amendment + millis();
+}
