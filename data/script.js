@@ -7,8 +7,17 @@ var body = document.getElementsByTagName("body")[0];
 ws_source = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
 
 
-function converte(e){
-  console.log(e);
+function converte(file_name){
+  console.log(file_name);
+  var request = new XMLHttpRequest();
+
+  request.open('GET', file_name);
+  request.send()
+  request.onload = function() {
+    let data = request.response;
+    let A = new Int8Array(data)
+    console.log(A);
+  };
 }
 
 function del(e){

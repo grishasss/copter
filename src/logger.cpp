@@ -10,7 +10,7 @@ LOG::LOG(){
     
 }
 
-void LOG::write_int( int32_t val , uint8_t cnt_bit){
+void LOG::write_int(int32_t val , uint8_t cnt_bit){
     for(uint8_t i  = 0 ; i < cnt_bit; i++){
         packet[pos_to_write + cnt_bit - i - 1] = (val & (1ll << i));
     }
@@ -67,7 +67,7 @@ void LOG::write_full(){
     file.close();
 }
 
-void LOG::write_small(){
+void LOG::add_line(){
     Sensors->time_recalc_small();
     pos_to_write = 0;
     write_int(Sensors->time_begin_day , 27);
@@ -83,26 +83,38 @@ void LOG::write_small(){
     write_int(Sensors->tangage * 1024 / 2 / pi , 10);
     write_int(Sensors->kren * 1024 / 2 / pi , 10);
     write_int(Sensors->yaw * 1024 / 2 / pi , 10);
-    
-    for(uint8_t i = 0 ; i < 140 ; i+=8){
-        packet_in_byte[i >> 3] = 0;
+    pos_to_write = (pos_to_write + 7 / 8)  * 8;
+
+
+    for(uint8_t i = 0 ; i < pos_to_write ; i+=8){
+        packet_in_byte[line_cnt][i >> 3] = 0;
         for(uint8_t j = 0 ; j < 8 ; j++){
-            packet_in_byte[i >> 3] |= (((uint8_t)packet[i + j]) << (8 - j)) ;
+            packet_in_byte[line_cnt][i >> 3] |= (((uint8_t)packet[i + j]) << (8 - j)) ;
         }   
     }
-    file = SPIFFS.open(file_name , "a");
-    file.write((char*)packet_in_byte, 31);
-    file.close();
+    line_cnt++;
+    sz_packet = (pos_to_write >> 3);
+    
 }
 
 void LOG::loop(){
+     if(line_cnt >= max_line){
+        file = SPIFFS.open(file_name , "a");
+        for(uint8_t  i = 0 ;  i < line_cnt ; i++){
+            file.write(packet_in_byte[i] , sz_packet);
+        }
+        file.close();
+        line_cnt = 0;
+    }
+
     if(Sensors->date_is_ccorrect){
         if(millis() - time_last_write > interval){
-            if(it_big)write_full();
-            else write_small();
+            add_line();
             time_last_write = millis();
         }
     }
+   
+
 }
 
 
