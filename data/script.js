@@ -10,14 +10,16 @@ ws_source = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
 function converte(file_name){
   console.log(file_name);
   var request = new XMLHttpRequest();
-
+  
   request.open('GET', file_name);
-  request.send()
+  request.responseType = "arraybuffer";
+  
   request.onload = function() {
     let data = request.response;
-    let A = new Int8Array(data)
+    let A = new Uint8Array(data)
     console.log(A);
   };
+  request.send()
 }
 
 function del(e){
