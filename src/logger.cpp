@@ -39,12 +39,13 @@ void LOG::open_file(){
     else file_name+= String(Sensors->date[5]);
     
 
-    file_name ="/log/" + file_name + ".bin";
+    file_name ="/log/" + file_name + ".hex";
 
     file = SPIFFS.open(file_name , "w");
+    file.close();
     Serial.println("write log to: " + file_name);
     // file.write(header);
-    file.close();
+    
 }
 
 void LOG::write_full(){

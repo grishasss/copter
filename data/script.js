@@ -24,6 +24,9 @@ function converte(file_name){
 }
 
 function delete_file(file_name){
+  if (!confirm("Do you want to delete: " + file_name)) {
+    return;
+  }
   console.log("delete: " + file_name);
   let command = new Uint8Array(2 + file_name.length);
   command[0] = 2;
@@ -65,13 +68,13 @@ function gen_file_list(){
     c.appendChild(cell);
     row.appendChild(c);
 
-    c = document.createElement("td");
-    cell = document.createElement("a");
-    cellText = document.createTextNode("view");
-    cell.setAttribute("href" , FILE_LIST[i].name);
-    cell.appendChild(cellText);
-    c.appendChild(cell);
-    row.appendChild(c);
+    // c = document.createElement("td");
+    // cell = document.createElement("a");
+    // cellText = document.createTextNode("view");
+    // cell.setAttribute("href" , FILE_LIST[i].name);
+    // cell.appendChild(cellText);
+    // c.appendChild(cell);
+    // row.appendChild(c);
 
     c = document.createElement("td");
     cell = document.createElement("a");
