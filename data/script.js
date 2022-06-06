@@ -77,18 +77,18 @@ function gen_file_list(){
     // row.appendChild(c);
 
     c = document.createElement("td");
-    cell = document.createElement("a");
+    cell = document.createElement("button");
     cellText = document.createTextNode("download");
-    cell.setAttribute("href" , FILE_LIST[i].name);
-    cell.setAttribute("download" , FILE_LIST[i].name);
+    cell.setAttribute("onclick" , "window.open('" + FILE_LIST[i].name + "')");
     cell.appendChild(cellText);
     c.appendChild(cell);
     row.appendChild(c);
 
+
+
     c = document.createElement("td");
     cell = document.createElement("button");
     cellText = document.createTextNode("delete");
-  
     cell.setAttribute("onclick" , "delete_file('"+  FILE_LIST[i].name + "')");
     cell.appendChild(cellText);
     c.appendChild(cell);
