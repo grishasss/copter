@@ -17,7 +17,7 @@ String getContentType(String filename){
   return "text/plain";
 }
 
- void WEB::send_file_name(){
+ void WEB::send_file_name(uint8_t client_num){
     Serial.println("send_file_name");
     Dir dir = SPIFFS.openDir("/log");
     size_t sz = 2;
@@ -49,10 +49,19 @@ String getContentType(String filename){
         }
     }
     Serial.println("file cnt: " + String(cnt_file));
-    webSocket.sendBIN(0 ,(const uint8_t *)data , sz);
- }
+    webSocket.sendBIN(client_num ,(const uint8_t *)data , sz);
+}
 
-void WEB::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
+
+void WEB::del_file(uint8_t * payload, size_t lenght){
+    String name;
+    for(uint8_t i = 0 ; i < payload[1] ;  i++){
+        name+=((char)payload[i + 2]);
+    }
+    Serial.println("delete file: " + name);
+    SPIFFS.remove(name);
+}
+void WEB::webSocketEvent(uint8_t client_num, WStype_t type, uint8_t * payload, size_t lenght) {
     switch (type){
         case WStype_CONNECTED:
             Serial.println("WebSocket is Connected");
@@ -63,7 +72,7 @@ void WEB::webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t l
             break;
         case  WStype_BIN:
             Serial.println("read BIN data to server!!!");
-            get_command(payload , lenght);
+            get_command(client_num ,payload , lenght);
             break;
     }
 }
@@ -128,8 +137,8 @@ void WEB::wifi_init(){
             Serial.println("FAIL");
         }
         else{
-            Serial.println("Connected!!! \n HOME MODE");
-            Serial.print("IP address:\t");
+            Serial.println("Connected!!! \nHOME MODE");
+            Serial.print("IP address: ");
             Serial.println(WiFi.localIP()); 
         }
     }
@@ -143,11 +152,8 @@ void WEB::wifi_init(){
 }
 
 
- void WEB::get_command(uint8_t * payload, size_t lenght){
-    if(lenght == 0){
-        Serial.println("Assert 1!!!");
-        return;
-    }
+ void WEB::get_command(uint8_t client_num , uint8_t * payload, size_t lenght){
+    assert(lenght);
     switch (payload[0]){
     case 0:
         Serial.println("Set global time on client");
@@ -162,10 +168,13 @@ void WEB::wifi_init(){
         }
         break;
     case 1:
-        send_file_name();
+        send_file_name(client_num);
+        break;
+    case 2:
+        del_file(payload, lenght);
         break;
     default:
-        Serial.println("Assert 2!!!");
+        assert(0);
         break;
     }
  }

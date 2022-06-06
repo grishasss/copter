@@ -8,7 +8,7 @@ ws_source = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
 
 
 function converte(file_name){
-  console.log(file_name);
+  console.log("converte: " + file_name);
   var request = new XMLHttpRequest();
   
   request.open('GET', file_name);
@@ -19,11 +19,27 @@ function converte(file_name){
     let A = new Uint8Array(data)
     console.log(A);
   };
-  request.send()
+  request.send();
+  
 }
 
-function del(e){
-  console.log(e);
+function delete_file(file_name){
+  console.log("delete: " + file_name);
+  let command = new Uint8Array(2 + file_name.length);
+  command[0] = 2;
+  command[1] = file_name.length;
+  for(let i = 0 ; i < file_name.length ; i++){
+    command[i + 2] = file_name[i].charCodeAt(0);
+  }
+  ws_source.send(command);
+  console.log(command);
+
+  var tbl = document.getElementsByTagName("table")[0];
+  tbl.remove();
+
+  let c1 = new Uint8Array(1);
+  c1[0] = 1;
+  ws_source.send(c1);
 }
 
 
@@ -70,7 +86,7 @@ function gen_file_list(){
     cell = document.createElement("button");
     cellText = document.createTextNode("delete");
   
-    cell.setAttribute("onclick" , "del('"+  FILE_LIST[i].name + "')");
+    cell.setAttribute("onclick" , "delete_file('"+  FILE_LIST[i].name + "')");
     cell.appendChild(cellText);
     c.appendChild(cell);
     row.appendChild(c);
@@ -133,7 +149,7 @@ function startSocket(){
       console.log("WS");
       websocket_started = true;
       let DATE = new Date(Date.now());
-      let date_time = new Int8Array(8);
+      let date_time = new Uint8Array(8);
       date_time[0] = 0;
       date_time[1] = DATE.getDate();
       date_time[2] = DATE.getMonth() + 1;
@@ -147,7 +163,7 @@ function startSocket(){
       ws_source.send(date_time);
       
 
-      let c1 = new Int8Array(1);
+      let c1 = new Uint8Array(1);
       c1[0] = 1;
       ws_source.send(c1);
     };

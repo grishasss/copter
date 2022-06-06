@@ -48,7 +48,8 @@ public:
     void query_file();
     void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght);
     void send_string(String data);
-    void get_command(uint8_t * payload, size_t lenght);
-    void send_file_name();
+    void get_command(uint8_t client_num , uint8_t * payload, size_t lenght);
+    void send_file_name(uint8_t client_num);
+    void del_file(uint8_t * payload, size_t lenght);
 };
 
