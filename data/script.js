@@ -75,12 +75,10 @@ function converte(file_name){
     let base = btoa(content);
     let res = 'data:application/octet-stream;base64, ' + base;
     
-    document.getElementById(file_name + "view").style.display = "inline";
     document.getElementById(file_name + "download").style.display = "inline";
 
     document.getElementById(file_name + "download").firstChild.firstChild.href = res;
     document.getElementById(file_name + "download").firstChild.firstChild.download = new_file_name;
-    document.getElementById(file_name + "view").firstChild.firstChild.onclick = "document.location = '" + res + "'";
     
 
   };
@@ -123,15 +121,13 @@ function gen_file_list(){
 
     var c = document.createElement("td");
     var cell = document.createElement("a");
-    var cellText = document.createTextNode(FILE_LIST[i].name);
-    cell.appendChild(cellText);
+    cell.appendChild(document.createTextNode(FILE_LIST[i].name));
     c.appendChild(cell);
     row.appendChild(c);
 
     c = document.createElement("td");
     cell = document.createElement("a");
-    cellText = document.createTextNode(FILE_LIST[i].size);
-    cell.appendChild(cellText);
+    cell.appendChild(document.createTextNode(FILE_LIST[i].size));
     c.appendChild(cell);
     row.appendChild(c);
 
@@ -148,8 +144,7 @@ function gen_file_list(){
     aa = document.createElement("a")
     aa.setAttribute("href" , FILE_LIST[i].name);
     aa.setAttribute("download" , FILE_LIST[i].name);
-    cellText = document.createTextNode("download");
-    aa.appendChild(cellText);
+    aa.appendChild(document.createTextNode("download"));
     cell.appendChild(aa);
     c.appendChild(cell);
     row.appendChild(c);
@@ -157,17 +152,15 @@ function gen_file_list(){
 
     c = document.createElement("td");
     cell = document.createElement("button");
-    cellText = document.createTextNode("delete");
     cell.setAttribute("onclick" , "delete_file('"+  FILE_LIST[i].name + "')");
-    cell.appendChild(cellText);
+    cell.appendChild(document.createTextNode("delete"));
     c.appendChild(cell);
     row.appendChild(c);
 
     c = document.createElement("td");
     cell = document.createElement("button");
-    cellText = document.createTextNode("converte");
     cell.setAttribute("onclick" , "converte('"+  FILE_LIST[i].name + "')");
-    cell.appendChild(cellText);
+    cell.appendChild(document.createTextNode("converte"));
     c.appendChild(cell);
     row.appendChild(c);
 
@@ -176,21 +169,12 @@ function gen_file_list(){
     c.setAttribute("id" , FILE_LIST[i].name + "download");
     cell = document.createElement("button");
     aa = document.createElement("a");
-    cellText = document.createTextNode("download csv");
-    aa.appendChild(cellText);
+    aa.appendChild( document.createTextNode("download csv"));
     cell.appendChild(aa);
     c.appendChild(cell);
     row.appendChild(c);
 
 
-    c = document.createElement("td");
-    c.style.display="none";
-    c.setAttribute("id" , FILE_LIST[i].name + "view");
-    cell = document.createElement("button");
-    cellText = document.createTextNode("view csv");
-    cell.appendChild(cellText);
-    c.appendChild(cell);
-    row.appendChild(c);
     
     tblBody.appendChild(row);
   }
