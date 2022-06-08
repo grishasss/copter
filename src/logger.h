@@ -28,7 +28,6 @@ class LOG{
     bool it_big = 0;
     String file_name;
     void open_file();
-    void write_full();
     void add_line();
     void write_int(int32_t val , uint8_t cnt_bit);
     void loop();

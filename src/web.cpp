@@ -166,6 +166,8 @@ void WEB::wifi_init(){
             Sensors->date_is_ccorrect = true;
             Log->open_file();
         }
+        Sensors->time_recalc_small();
+        // Serial.println(Sensors->time_begin_day);
         break;
     case 1:
         send_file_name(client_num);

@@ -30,7 +30,7 @@ void LOG::open_file(){
     if(Sensors->date[3] < 10) file_name+= '0' + String(Sensors->date[3]);
     else file_name+= String(Sensors->date[3]);
     file_name +=':';
-    
+
     if(Sensors->date[4] < 10) file_name+= '0' + String(Sensors->date[4]);
     else file_name+= String(Sensors->date[4]);
     file_name +=':';
@@ -48,31 +48,6 @@ void LOG::open_file(){
     
 }
 
-void LOG::write_full(){
-    Sensors->time_recalc_big();
-    String T;
-    if(Sensors->date[3] < 10) T+= '0' + String(Sensors->date[3]);
-    else T+= String(Sensors->date[3]);
-    T +=':';
-    
-    if(Sensors->date[4] < 10) T+= '0' + String(Sensors->date[4]);
-    else T+= String(Sensors->date[4]);
-
-    T+=':';
-
-    if(Sensors->date[5] < 10) T+= '0' + String(Sensors->date[5]);
-    else T+= String(Sensors->date[5]);
-
-    T+=':';
-
-    if(Sensors->date[6]  < 10) T+= '0' + String(Sensors->date[6]);
-    else T+= String(Sensors->date[6]);
-    T+='0';
-    // Serial.println(T);
-    file = SPIFFS.open(file_name , "a");
-    file.print(T + '\n');
-    file.close();
-}
 
 void LOG::add_line(){
     ls_pos = pos_to_write;
@@ -98,9 +73,13 @@ void LOG::add_line(){
     for(uint16_t i = ls_pos ; i < pos_to_write ; i+=8){
         packet_in_byte[i >> 3] = 0;
         for(uint8_t j = 0 ; j < 8 ; j++){
-            packet_in_byte[i >> 3] |= (((uint8_t)packet[i + j - ls_pos]) << (8 - j)) ;
-        }   
+            packet_in_byte[i >> 3] |= (((uint8_t)packet[i + j - ls_pos]) << (7 - j)) ;
+        }
+        // Serial.print(packet_in_byte[i >> 3]);
+        // Serial.print(" ");
+
     }
+    // Serial.println();
     line_cnt++;
 }
 
