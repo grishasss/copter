@@ -33,7 +33,7 @@ function converte(file_name){
       pos+=cnt_bit;
       return  ans;
     }
-    let content = [];
+    let content = "header";
     for(; pos < A.length;){
       tmp = "";
       let tt  = get_int(27);
@@ -65,11 +65,23 @@ function converte(file_name){
       tmp+=get_int(10);
       get_int(2);
       console.log(tmp);
-      content.push(tmp);
+      content+=tmp + '\n';
     }
+
     console.log(content);
+    
+    new_file_name = file_name.slice(0, -3) + "csv";
+    
+    let base = btoa(content);
+    let res = 'data:application/octet-stream;base64, ' + base;
+    
     document.getElementById(file_name + "view").style.display = "inline";
     document.getElementById(file_name + "download").style.display = "inline";
+
+    document.getElementById(file_name + "download").firstChild.firstChild.href = res;
+    document.getElementById(file_name + "download").firstChild.firstChild.download = new_file_name;
+    document.getElementById(file_name + "view").firstChild.firstChild.onclick = "document.location = '" + res + "'";
+    
 
   };
   request.send();
@@ -162,11 +174,11 @@ function gen_file_list(){
     c = document.createElement("td");
     c.style.display="none";
     c.setAttribute("id" , FILE_LIST[i].name + "download");
-    
     cell = document.createElement("button");
-    
+    aa = document.createElement("a");
     cellText = document.createTextNode("download csv");
-    cell.appendChild(cellText);
+    aa.appendChild(cellText);
+    cell.appendChild(aa);
     c.appendChild(cell);
     row.appendChild(c);
 
@@ -174,7 +186,6 @@ function gen_file_list(){
     c = document.createElement("td");
     c.style.display="none";
     c.setAttribute("id" , FILE_LIST[i].name + "view");
-    
     cell = document.createElement("button");
     cellText = document.createTextNode("view csv");
     cell.appendChild(cellText);
