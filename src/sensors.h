@@ -19,6 +19,13 @@
 #define pi 3.14
 #define Gg 9.81
 
+
+class Date{
+public:
+    uint8_t day , mounth , year , hour , minute , second , millis10;
+};
+
+
 class SENSORS{
 public:
 
@@ -33,8 +40,12 @@ public:
     float v_kren , v_tangage , v_yaw;
     
     int32_t amendment;
-    uint8_t date[7]; // day , mounth , year , hour , minute , second , millis / 10
-    int8_t joy_state[4];
+    Date date;
+    int16_t joy1X;
+    int16_t joy1Y;
+    int16_t joy2X;
+    int16_t joy2Y;
+    
     bool date_is_ccorrect = 0;
 
 

@@ -11,6 +11,11 @@ LOG::LOG(){
 }
 
 void LOG::write_int(int32_t val , uint8_t cnt_bit){
+    if(val < 0) {
+        packet[pos_to_write - ls_pos] = 1;
+        val = -val;
+    }
+
     for(uint8_t i  = 0 ; i < cnt_bit; i++){
         packet[pos_to_write + cnt_bit - i - 1 - ls_pos] = (val & (1ll << i));
     }
@@ -19,24 +24,24 @@ void LOG::write_int(int32_t val , uint8_t cnt_bit){
 
 void LOG::open_file(){
     
-    if(Sensors->date[0] < 10) file_name+= '0' + String(Sensors->date[0]);
-    else file_name+= String(Sensors->date[0]);
+    if(Sensors->date.day < 10) file_name+= '0' + String(Sensors->date.day);
+    else file_name+= String(Sensors->date.day);
     file_name +='.';
     
-    if(Sensors->date[1] < 10) file_name+= '0' + String(Sensors->date[1]);
-    else file_name+= String(Sensors->date[1]);
+    if(Sensors->date.mounth < 10) file_name+= '0' + String(Sensors->date.mounth);
+    else file_name+= String(Sensors->date.mounth);
     file_name +='-';
 
-    if(Sensors->date[3] < 10) file_name+= '0' + String(Sensors->date[3]);
-    else file_name+= String(Sensors->date[3]);
+    if(Sensors->date.hour < 10) file_name+= '0' + String(Sensors->date.hour);
+    else file_name+= String(Sensors->date.hour);
     file_name +=':';
 
-    if(Sensors->date[4] < 10) file_name+= '0' + String(Sensors->date[4]);
-    else file_name+= String(Sensors->date[4]);
+    if(Sensors->date.minute < 10) file_name+= '0' + String(Sensors->date.minute);
+    else file_name+= String(Sensors->date.minute);
     file_name +=':';
 
-    if(Sensors->date[5] < 10) file_name+= '0' + String(Sensors->date[5]);
-    else file_name+= String(Sensors->date[5]);
+    if(Sensors->date.second < 10) file_name+= '0' + String(Sensors->date.second);
+    else file_name+= String(Sensors->date.second);
     
 
     file_name ="/log/" + file_name + ".hex";
@@ -56,10 +61,11 @@ void LOG::add_line(){
     write_int(analogRead(A0) , 10);
     write_int(Sensors->altitude, 11);
     
-
-    for(int8_t i = 0 ; i < 4 ; i++){
-        write_int(Sensors->joy_state[i] , 8);
-    }
+    
+    write_int(Sensors->joy1X , 8);
+    write_int(Sensors->joy1Y , 8);
+    write_int(Sensors->joy2X , 8);
+    write_int(Sensors->joy2Y , 8);
 
 
     write_int(Sensors->tangage * 1024 / 2 / pi , 10);
@@ -80,6 +86,8 @@ void LOG::add_line(){
 
     }
     // Serial.println();
+    // Sensors->time_recalc_big();
+    // Serial.println(Sensors->date[4]);
     line_cnt++;
 }
 
@@ -87,6 +95,7 @@ void LOG::loop(){
      if(line_cnt >= max_line){
         file = SPIFFS.open(file_name , "a");
         Serial.println("write to file: " + String(pos_to_write));
+    
         file.write(packet_in_byte , pos_to_write >> 3);
         file.close();
         line_cnt = 0;

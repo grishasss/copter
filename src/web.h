@@ -51,5 +51,7 @@ public:
     void get_command(uint8_t client_num , uint8_t * payload, size_t lenght);
     void send_file_name(uint8_t client_num);
     void del_file(uint8_t * payload, size_t lenght);
+    void set_status_joy(uint8_t * payload, size_t lenght);
+    void set_date(uint8_t * payload, size_t lenght);
 };
 

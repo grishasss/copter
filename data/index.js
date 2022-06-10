@@ -1,10 +1,12 @@
 let websocket_started = 0
-let FILE_LIST = [];
-var body = document.getElementsByTagName("body")[0];
-
-
-
 ws_source = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
+
+
+var body = document.getElementsByTagName("body")[0];
+let FILE_LIST = [];
+
+
+
 
 
 
@@ -19,8 +21,11 @@ function converte(file_name){
 
   request.onload = function() {
     let data = request.response;
+    
     let A = new Uint8Array(data);
     console.log(A);
+    console.log(data);
+    
     function get_bit(num_bit){
       return Boolean(A[num_bit >> 3] & (1 << (7 - (num_bit % 8))));
     }
@@ -33,8 +38,8 @@ function converte(file_name){
       pos+=cnt_bit;
       return  ans;
     }
-    let content = "header";
-    for(; pos < A.length;){
+    let content = "Time,Vol(v),joy1X , joy1Y , joy2X , joy2Y";
+    for(; pos < A.length*8;){
       tmp = "";
       let tt  = get_int(27);
       console.log(tt);
@@ -221,6 +226,7 @@ function startSocket(){
     ws_source.onopen = function(e){
       console.log("WS");
       websocket_started = true;
+      document.getElementById("status_connected").textContent = "connected";
       let DATE = new Date(Date.now());
       let date_time = new Uint8Array(8);
       date_time[0] = 0;
@@ -244,6 +250,7 @@ function startSocket(){
     ws_source.onclose = function(e){
       websocket_started = false;
       console.log("~WS");
+      document.getElementById("status_connected").textContent = "disconnected";
       if(!log_off) setTimeout(startSocket, 3000);
     };
     ws_source.onerror = function(e){
@@ -253,7 +260,6 @@ function startSocket(){
       console.log(e.data);     
       get_command(e);
     };
-
 }
 
 startSocket();

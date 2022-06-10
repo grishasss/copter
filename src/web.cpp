@@ -61,6 +61,51 @@ void WEB::del_file(uint8_t * payload, size_t lenght){
     Serial.println("delete file: " + name);
     SPIFFS.remove(name);
 }
+
+void WEB::set_status_joy(uint8_t * payload, size_t lenght){
+    Serial.println("set status joy");
+    assert(lenght == 5);
+    // Sensors->joy1X = payload[1] ^ ((1 << 7) & (payload[1]));
+    // if(payload[1] & (1 << 7)) Sensors->joy1X *=-1;
+
+    // Sensors->joy1Y = payload[2] ^ ((1 << 7) & (payload[2]));
+    // if(payload[2] & (1 << 7)) Sensors->joy1Y *=-1;
+
+    // Sensors->joy2X = payload[3] ^ ((1 << 7) & (payload[3]));
+    // if(payload[3] & (1 << 7)) Sensors->joy2X *=-1;
+
+    // Sensors->joy2Y = payload[4] ^ ((1 << 7) & (payload[4]));
+    // if(payload[4] & (1 << 7)) Sensors->joy2Y *=-1;
+    Serial.println(((int16_t)(payload[1]) - 100));
+    Serial.println(((int16_t)(payload[2]) - 100));
+    Serial.println(((int16_t)(payload[3]) - 100));
+    Serial.println(((int16_t)(payload[4]) - 100));
+    
+
+
+    Sensors->joy1X = ((int16_t)(payload[1]) - 100);
+    Sensors->joy1Y = ((int16_t)(payload[2]) - 100);
+    Sensors->joy2X = ((int16_t)(payload[3]) - 100);
+    Sensors->joy2Y = ((int16_t)(payload[4]) - 100);
+    
+
+}
+
+void WEB::set_date(uint8_t * payload, size_t lenght){
+    Serial.println("Set global time on client");
+    assert(lenght == 8);
+    Sensors->amendment =  (int32_t)payload[4] * 3600000 + (int32_t)payload[5] * 60000 + (int32_t)payload[6] * 1000 + (int32_t)payload[7] * 10 - millis();
+    Sensors->date.day = payload[1];
+    Sensors->date.mounth = payload[2];
+    Sensors->date.year = payload[3];
+    Sensors->time_recalc_big();
+    if(!Sensors->date_is_ccorrect){
+        Sensors->date_is_ccorrect = true;
+        Log->open_file();
+    }
+}
+
+
 void WEB::webSocketEvent(uint8_t client_num, WStype_t type, uint8_t * payload, size_t lenght) {
     switch (type){
         case WStype_CONNECTED:
@@ -84,6 +129,7 @@ bool WEB::handleFileRead(String path) {
   if (SPIFFS.exists(path)) { 
     File file = SPIFFS.open(path, "r"); 
     size_t sent = server.streamFile(file, contentType);
+    Serial.println(sent);
     file.close(); 
     return true;
   }
@@ -156,24 +202,16 @@ void WEB::wifi_init(){
     assert(lenght);
     switch (payload[0]){
     case 0:
-        Serial.println("Set global time on client");
-
-        Sensors->amendment =  (int32_t)payload[4] * 3600000 + (int32_t)payload[5] * 60000 + (int32_t)payload[6] * 1000 + (int32_t)payload[7] * 10 - millis();
-        for(int8_t i = 0 ; i < 7; i++){
-            Sensors->date[i] = payload[i + 1];
-        }
-        if(!Sensors->date_is_ccorrect){
-            Sensors->date_is_ccorrect = true;
-            Log->open_file();
-        }
-        Sensors->time_recalc_small();
-        // Serial.println(Sensors->time_begin_day);
+        set_date(payload , lenght);
         break;
     case 1:
         send_file_name(client_num);
         break;
     case 2:
         del_file(payload, lenght);
+        break;
+    case 3:
+        set_status_joy(payload, lenght);
         break;
     default:
         assert(0);

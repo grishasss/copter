@@ -175,6 +175,9 @@ var JoyStick = (function(container, parameters, callback)
             movedX = centerX;
             movedY = centerY;
         }
+        else {
+            movedX = centerX; 
+        }
         // Delete canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
         // Redraw object
@@ -240,6 +243,9 @@ var JoyStick = (function(container, parameters, callback)
         {
             movedX = centerX;
             movedY = centerY;
+        }
+        else {
+            movedX = centerX; 
         }
         // Delete canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -347,7 +353,7 @@ var JoyStick = (function(container, parameters, callback)
      */
     this.GetX = function ()
     {
-        return (100*((movedX - centerX)/maxMoveStick)).toFixed();
+        return parseInt((100*((movedX - centerX)/maxMoveStick)).toFixed());
     };
 
     /**
@@ -356,7 +362,7 @@ var JoyStick = (function(container, parameters, callback)
      */
     this.GetY = function ()
     {
-        return ((100*((movedY - centerY)/maxMoveStick))*-1).toFixed();
+        return parseInt(((100*((movedY - centerY)/maxMoveStick))*-1).toFixed());
     };
 
     /**

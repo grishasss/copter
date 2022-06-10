@@ -104,10 +104,10 @@ void SENSORS::loop(){
 
 void SENSORS::time_recalc_big(){
     time_begin_day = amendment + millis();
-    date[3] = time_begin_day / 1000 / 3600;
-    date[4] = time_begin_day / 1000 / 60 % 60;
-    date[5] =  time_begin_day / 1000 % 60;
-    date[6] = time_begin_day % 1000 / 10;
+    date.hour = time_begin_day / 1000 / 3600;
+    date.minute = time_begin_day / 1000 / 60 % 60;
+    date.second =  time_begin_day / 1000 % 60;
+    date.millis10 = time_begin_day % 1000 / 10;
 }
 
 void SENSORS::time_recalc_small(){

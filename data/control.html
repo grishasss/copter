@@ -5,13 +5,13 @@
         <title>contol page</title>
         <script src="joy.js"></script>
 		<style>
-#joyDiv
+#joy1Div
 {
 	width:200px;
 	height:200px;
 	margin:50px
 }	
-#joy1Div
+#joy2Div
 {
 	width:200px;
 	height:200px;
@@ -37,6 +37,10 @@
   margin-right: auto; 
  
 }
+a { 
+    text-decoration: none;
+    color: black;
+}
 
 		</style>
     </head>
@@ -48,9 +52,11 @@
 			
 			<div class="columnCetral">
 				<h1>flying info</h1>
+				<h1 id="status_connected">disconnected</h1>
+				<button><a href="index.html">go to main</a></button>
 			</div>
 			<div class="columnLateral">
-				<div id="joyDiv"></div>
+				<div id="joy2Div"></div>
 			</div>
 			
 			<script src="control.js"></script>
