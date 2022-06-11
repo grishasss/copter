@@ -15,7 +15,7 @@ class LOG{
     SENSORS *Sensors;
     const char* header = "Date,voltage,altitude, \n";
     uint8_t line_cnt = 0;
-    
+    bool log_is_write = 1;
     bool packet[line_sz];
     uint8_t packet_in_byte[max_line * line_sz / 8 + 10];
     uint16_t pos_to_write = 0;

@@ -94,7 +94,7 @@ void LOG::add_line(){
 }
 
 void LOG::loop(){
-     if(line_cnt >= max_line){
+     if(line_cnt >= max_line || (!log_is_write && line_cnt)){
         file = SPIFFS.open(file_name , "a");
         Serial.println("write to file: " + String(pos_to_write));
     
@@ -104,7 +104,7 @@ void LOG::loop(){
         pos_to_write = 0;
     }
 
-    if(Sensors->date_is_ccorrect){
+    if(Sensors->date_is_ccorrect && log_is_write){
         if(millis() - time_last_write > interval){
             add_line();
             time_last_write = millis();

@@ -213,6 +213,15 @@ void WEB::wifi_init(){
     case 3:
         set_status_joy(payload, lenght);
         break;
+    case 4:
+        Serial.println("log write");
+        Log->log_is_write = 1;
+        break;
+    case 5:
+        Serial.println("log no write");
+        Log->log_is_write = 0;
+        break;
+    
     default:
         assert(0);
         break;
