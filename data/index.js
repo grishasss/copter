@@ -30,18 +30,22 @@ function converte(file_name){
       return Boolean(A[num_bit >> 3] & (1 << (7 - (num_bit % 8))));
     }
     let pos = 0;
-    function get_int(cnt_bit){
+    function get_int(cnt_bit , f){
       let ans = 0;
-      for(let i = pos ; i < pos + cnt_bit ; i++){
+      for(let i = pos + f; i < pos + cnt_bit ; i++){
         ans+=get_bit(i) * (1 << (cnt_bit - (i -  pos) - 1));
       }
+      if(f && get_bit(pos)) ans -= (1 << (cnt_bit - 1));
       pos+=cnt_bit;
       return  ans;
     }
-    let content = "Time,Vol(v),joy1X , joy1Y , joy2X , joy2Y";
+
+    let date = "2022-"+file_name[8]+file_name[9]+ "-" + file_name[5]+file_name[6];  
+    let content = "Date,Time,Vol(V),Altitude(mm),Joy1X,Joy1Y,Joy2X,Joy2Y,Tangage,Kren,Yaw";
+    content+="\n";
     for(; pos < A.length*8;){
-      tmp = "";
-      let tt  = get_int(27);
+      tmp = date + ",";
+      let tt  = get_int(27 , 0);
       console.log(tt);
       let cnt_h = Math.floor(tt / 3600 / 1000);
       let cnt_m = Math.floor(tt / 1000 / 60) % 60;
@@ -59,15 +63,15 @@ function converte(file_name){
       tmp+=cnt_mil;
 
       tmp+=','; 
-      tmp+=(get_int(10) * 3.3 / 1024).toFixed(2)+ ',';
-      tmp+=get_int(11) + ',';
-      tmp+=get_int(8) + ',';
-      tmp+=get_int(8) + ',';
-      tmp+=get_int(8) + ',';
-      tmp+=get_int(8) + ',';
-      tmp+=get_int(10) + ',';
-      tmp+=get_int(10) + ',';
-      tmp+=get_int(10);
+      tmp+=(get_int(10 , 0) * 3.3 / 1024).toFixed(  2)+ ',';
+      tmp+=get_int(11 , 0) + ',';
+      tmp+=get_int(8 , 1) + ',';
+      tmp+=get_int(8  , 1) + ',';
+      tmp+=get_int(8 , 1) + ',';
+      tmp+=get_int(8  , 1) + ',';
+      tmp+=get_int(10 , 0) + ',';
+      tmp+=get_int(10, 0) + ',';
+      tmp+=get_int(10 , 0);
       get_int(2);
       console.log(tmp);
       content+=tmp + '\n';

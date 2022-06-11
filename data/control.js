@@ -91,4 +91,4 @@ function send_joy_status(){
 startSocket();
 
 
-setInterval(send_joy_status ,100);
+setInterval(send_joy_status ,90);

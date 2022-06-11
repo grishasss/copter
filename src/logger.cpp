@@ -11,12 +11,14 @@ LOG::LOG(){
 }
 
 void LOG::write_int(int32_t val , uint8_t cnt_bit){
+    int8_t otstup = 0;
     if(val < 0) {
         packet[pos_to_write - ls_pos] = 1;
-        val = -val;
+        val += (1  << (cnt_bit - 1));
+        otstup = 1;
     }
 
-    for(uint8_t i  = 0 ; i < cnt_bit; i++){
+    for(uint8_t i  = 0 ; i < cnt_bit - otstup; i++){
         packet[pos_to_write + cnt_bit - i - 1 - ls_pos] = (val & (1ll << i));
     }
     pos_to_write +=cnt_bit;
