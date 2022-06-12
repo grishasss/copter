@@ -13,7 +13,7 @@ void MEMORY::write_bit(bool f , uint16_t pos){
     uint8_t cnt_bit = 7 - pos % 8;
     ls ^= (ls & (1 << cnt_bit));
     ls |= ((uint8_t)f << cnt_bit); 
-    EEPROM.write(pos >> 3 , ls);
+    EEPROM.write(pos >> 3 , ls); 
     EEPROM.commit();
 }
 
