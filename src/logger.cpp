@@ -47,11 +47,12 @@ void LOG::open_file(){
     
 
     file_name ="/log/" + file_name + ".hex";
-
-    file = SPIFFS.open(file_name , "w");
-    file.close();
-    Serial.println("write log to: " + file_name);
-    // file.write(header);
+    log_is_write = Memory->get_bit(0);
+    if(log_is_write){
+        file = SPIFFS.open(file_name , "w");
+        file.close();
+        Serial.println("write log to: " + file_name);
+    }
 }
 
 
@@ -93,7 +94,7 @@ void LOG::add_line(){
 }
 
 void LOG::loop(){
-     if(line_cnt >= max_line){
+     if(line_cnt >= max_line || (!log_is_write && line_cnt)){
         file = SPIFFS.open(file_name , "a");
         Serial.println("write to file: " + String(pos_to_write));
     
@@ -103,7 +104,7 @@ void LOG::loop(){
         pos_to_write = 0;
     }
 
-    if(Sensors->date_is_ccorrect){
+    if(Sensors->date_is_ccorrect && log_is_write){
         if(millis() - time_last_write > interval){
             add_line();
             time_last_write = millis();
@@ -121,4 +122,3 @@ void LOG::loop(){
 // pos 8*4 = 32
 // power 8*4 =32
 // angle 3*10 = 30
-
