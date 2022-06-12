@@ -65,21 +65,10 @@ void WEB::del_file(uint8_t * payload, size_t lenght){
 void WEB::set_status_joy(uint8_t * payload, size_t lenght){
     Serial.println("set status joy");
     assert(lenght == 5);
-    // Sensors->joy1X = payload[1] ^ ((1 << 7) & (payload[1]));
-    // if(payload[1] & (1 << 7)) Sensors->joy1X *=-1;
-
-    // Sensors->joy1Y = payload[2] ^ ((1 << 7) & (payload[2]));
-    // if(payload[2] & (1 << 7)) Sensors->joy1Y *=-1;
-
-    // Sensors->joy2X = payload[3] ^ ((1 << 7) & (payload[3]));
-    // if(payload[3] & (1 << 7)) Sensors->joy2X *=-1;
-
-    // Sensors->joy2Y = payload[4] ^ ((1 << 7) & (payload[4]));
-    // if(payload[4] & (1 << 7)) Sensors->joy2Y *=-1;
-    Serial.println(((int16_t)(payload[1]) - 100));
-    Serial.println(((int16_t)(payload[2]) - 100));
-    Serial.println(((int16_t)(payload[3]) - 100));
-    Serial.println(((int16_t)(payload[4]) - 100));
+    // Serial.println(((int16_t)(payload[1]) - 100));
+    // Serial.println(((int16_t)(payload[2]) - 100));
+    // Serial.println(((int16_t)(payload[3]) - 100));
+    // Serial.println(((int16_t)(payload[4]) - 100));
     
 
 
@@ -87,8 +76,6 @@ void WEB::set_status_joy(uint8_t * payload, size_t lenght){
     Sensors->joy1Y = ((int16_t)(payload[2]) - 100);
     Sensors->joy2X = ((int16_t)(payload[3]) - 100);
     Sensors->joy2Y = ((int16_t)(payload[4]) - 100);
-    
-
 }
 
 void WEB::set_date(uint8_t * payload, size_t lenght){
