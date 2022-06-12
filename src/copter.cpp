@@ -10,7 +10,7 @@
 #include "sensors.h"
 #include "motor.h"
 #include "logger.h"
-
+#include "memory.h"
 
 
 Copter::Copter(){
@@ -23,19 +23,22 @@ SENSORS sensors;
 
 LOG Log;
 MATH math;
-// WEB web;
+MEMORY memory;
 WEB  web;
 void INIT(){
     Serial.begin(115200);
-    SPIFFS.begin();
-    EEPROM.begin(512);
-   
-    sensors.begin();
+    memory.init();
+
     web.Sensors = (&sensors);
     web.Log = (&Log);
+    web.Memory = (&memory);
     Log.Sensors = (&sensors);
+    Log.Memory = (&memory);
+    
     web.wifi_init();
+    sensors.begin();
     web.start_all_server();
+
 }
 
 

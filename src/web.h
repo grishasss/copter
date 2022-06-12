@@ -8,12 +8,13 @@
 #include "math_copter.h"
 #include "logger.h"
 #include "sensors.h"
-
+#include "memory.h"
 
 #include <WiFiUdp.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
+#include <EEPROM.h>
 // #include <WebSocketsClient.h>
 
 
@@ -37,6 +38,7 @@ public:
     MATH *Math;
     LOG *Log; 
     SENSORS *Sensors;
+    MEMORY *Memory;
     // WebSocketsClient clients[max_client];
     // int8_t client_number;
     bool webSocket_it_connect;
@@ -53,5 +55,6 @@ public:
     void del_file(uint8_t * payload, size_t lenght);
     void set_status_joy(uint8_t * payload, size_t lenght);
     void set_date(uint8_t * payload, size_t lenght);
+    void log_change_status(bool f);
 };
 

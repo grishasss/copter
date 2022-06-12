@@ -4,6 +4,7 @@
 #include <FS.h>
 #include "math_copter.h"
 #include "sensors.h"
+#include "memory.h"
 #define max_line 70
 #define line_sz 150
 
@@ -13,6 +14,7 @@ class LOG{
     
     LOG(); 
     SENSORS *Sensors;
+    MEMORY *Memory;
     const char* header = "Date,voltage,altitude, \n";
     uint8_t line_cnt = 0;
     bool log_is_write = 1;

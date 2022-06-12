@@ -47,12 +47,12 @@ void LOG::open_file(){
     
 
     file_name ="/log/" + file_name + ".hex";
-
-    file = SPIFFS.open(file_name , "w");
-    file.close();
-    Serial.println("write log to: " + file_name);
-    // file.write(header);
-    
+    log_is_write = Memory->get_bit(0);
+    if(log_is_write){
+        file = SPIFFS.open(file_name , "w");
+        file.close();
+        Serial.println("write log to: " + file_name);
+    }
 }
 
 

@@ -197,6 +197,14 @@ void WEB::wifi_init(){
     
 }
 
+void WEB::log_change_status(bool f){
+    if(f) Serial.println("log write");
+    else Serial.println("log no write");
+
+    Log->log_is_write = f;
+    Memory->write_bit(f , 0);
+}
+
 
  void WEB::get_command(uint8_t client_num , uint8_t * payload, size_t lenght){
     assert(lenght);
@@ -214,12 +222,10 @@ void WEB::wifi_init(){
         set_status_joy(payload, lenght);
         break;
     case 4:
-        Serial.println("log write");
-        Log->log_is_write = 1;
+        log_change_status(1);
         break;
     case 5:
-        Serial.println("log no write");
-        Log->log_is_write = 0;
+        log_change_status(0);
         break;
     
     default:
