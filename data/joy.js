@@ -67,6 +67,9 @@ var JoyStick = (function(container, parameters, callback)
     // Used to save current position of stick
     var movedX=centerX;
     var movedY=centerY;
+    if(!autoReturnToCenter){
+        movedY = canvas.height;
+    }
 
     // Check if the device support the touch or not
     if("ontouchstart" in document.documentElement)
