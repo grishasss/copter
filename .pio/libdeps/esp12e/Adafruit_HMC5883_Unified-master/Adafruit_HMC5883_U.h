@@ -94,7 +94,7 @@ private:
 
   void write8(byte address, byte reg, byte value);
   byte read8(byte address, byte reg);
-  void read(void);
+  bool read(void);
 };
 
 #endif

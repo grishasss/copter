@@ -100,7 +100,7 @@ byte Adafruit_HMC5883_Unified::read8(byte address, byte reg) {
     @brief  Reads the raw data from the sensor
 */
 /**************************************************************************/
-void Adafruit_HMC5883_Unified::read() {
+bool Adafruit_HMC5883_Unified::read() {
   // Read the magnetometer
   Wire.beginTransmission((byte)HMC5883_ADDRESS_MAG);
 #if ARDUINO >= 100
@@ -112,8 +112,10 @@ void Adafruit_HMC5883_Unified::read() {
   Wire.requestFrom((byte)HMC5883_ADDRESS_MAG, (byte)6);
 
   // Wait around until enough data is available
-  while (Wire.available() < 6)
+  uint32_t start_time =  millis();
+  while (Wire.available() < 6 && millis() - start_time < 50)
     ;
+  if(millis() - start_time >= 50) return false;
 
 // Note high before low (different than accel)
 #if ARDUINO >= 100
@@ -139,6 +141,7 @@ void Adafruit_HMC5883_Unified::read() {
 
   // ToDo: Calculate orientation
   _magData.orientation = 0.0;
+  return true;
 }
 
 /***************************************************************************
@@ -173,7 +176,7 @@ bool Adafruit_HMC5883_Unified::begin() {
   // Set the gain to a known level
   setMagGain(HMC5883_MAGGAIN_1_3);
 
-  return true;
+  return read();
 }
 
 /**************************************************************************/
