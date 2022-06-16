@@ -52,8 +52,10 @@ bool SENSORS::start_lox(){
     return false;
 }
 
-float SENSORS::get_voltage(){
-    return (analogRead(A0)) / 1024 * (R1 + R2) / R2;    
+void SENSORS::get_voltage(){
+    if(millis() - time_last_voltage < 90) return;
+    time_last_voltage = millis();
+    voltage = analogRead(A0) / 1024 * (R1 + R2) / R2;    
 }
 void SENSORS::mpu_set_zero(){
     sensors_event_t a, g, temp;
@@ -79,26 +81,28 @@ void SENSORS::mpu_set_zero(){
 
 
 void SENSORS::loop(){
-    sensors_event_t a, g, temp;
-    mpu.getEvent(&a, &g, &temp);
-    tangage += (v_tangage + g.gyro.x) / 2 * (millis() - time_last_update) / 1000;
-    kren += (v_kren + g.gyro.y) / 2 * (millis() - time_last_update) / 1000;
-    yaw += (v_yaw + g.gyro.z) / 2 * (millis() - time_last_update) / 1000;
-    norm_angle(tangage);
-    norm_angle(kren);
-    norm_angle(yaw);
+    if(is_mpu_begin){
+        sensors_event_t a, g, temp;
+        mpu.getEvent(&a, &g, &temp);
+        tangage += (v_tangage + g.gyro.x) / 2 * (millis() - time_last_update) / 1000;
+        kren += (v_kren + g.gyro.y) / 2 * (millis() - time_last_update) / 1000;
+        yaw += (v_yaw + g.gyro.z) / 2 * (millis() - time_last_update) / 1000;
+        norm_angle(tangage);
+        norm_angle(kren);
+        norm_angle(yaw);
+        
+        v_tangage = g.gyro.x;
+        v_kren = g.gyro.y;
+        v_yaw = g.gyro.z;
+    }
     
-    v_tangage = g.gyro.x;
-    v_kren = g.gyro.y;
-    v_yaw = g.gyro.z;
+    if(is_lox_begin){
+        VL53L0X_RangingMeasurementData_t measure;
+        lox.rangingTest(&measure, false);
+        altitude = measure.RangeMilliMeter;
+    }
     time_last_update = millis();
-    voltage = get_voltage();
-
-    VL53L0X_RangingMeasurementData_t measure;
-    lox.rangingTest(&measure, false);
-    
-    altitude = measure.RangeMilliMeter;
-    
+    get_voltage();
 }
 
 

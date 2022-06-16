@@ -51,9 +51,9 @@ public:
 
     int16_t altitude;
     float voltage;
-    int32_t time_begin_day;
-    int32_t time_last_update = 0;
-
+    uint32_t time_begin_day;
+    uint32_t time_last_update = 0;
+    uint32_t time_last_voltage = 0;
     bool start_mpu();
     bool start_mag();
     bool start_lox();
@@ -63,7 +63,7 @@ public:
     bool is_lox_begin;
 
     void begin();
-    float get_voltage();
+    void get_voltage();
     void loop();
     void mpu_set_zero();
     void mpu_calibrate(); // tmp not avibale

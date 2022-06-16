@@ -55,5 +55,6 @@ void Copter::process(){
     web.loop();
     Log.loop();
     math.loop();
+    sensors.loop();
     Serial.println(micros() - start);
 }
