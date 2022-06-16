@@ -34,7 +34,8 @@ void INIT(){
     web.Memory = (&memory);
     Log.Sensors = (&sensors);
     Log.Memory = (&memory);
-    
+    math.Sensors = (&sensors);
+
     web.wifi_init();
     sensors.begin();
     web.start_all_server();
@@ -53,6 +54,6 @@ void Copter::process(){
     uint64_t start = micros();
     web.loop();
     Log.loop();
-    // math.loop();
+    math.loop();
     Serial.println(micros() - start);
 }
