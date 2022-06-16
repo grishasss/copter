@@ -14,7 +14,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
-#include <EEPROM.h>
+#include <ArduinoOTA.h>
 // #include <WebSocketsClient.h>
 
 
@@ -56,5 +56,7 @@ public:
     void set_status_joy(uint8_t * payload, size_t lenght);
     void set_date(uint8_t * payload, size_t lenght);
     void log_change_status(bool f);
+    
+    void start_ota();
 };
 

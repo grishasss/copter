@@ -4,6 +4,7 @@ ws_source = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
 
 var body = document.getElementsByTagName("body")[0];
 let log_chbox = document.getElementById("log_chbox");
+let ota_chbox = document.getElementById("ota_chbox");
 let FILE_LIST = [];
 
 
@@ -281,6 +282,20 @@ function change_status_log(){
   } 
   ws_source.send(c1);
 }
+
+function change_status_ota(){
+  let c1 = new Uint8Array(1);
+  if(ota_chbox.checked == true){
+    console.log(1);
+    c1[0] = 6;
+  }
+  else{
+    console.log(0);
+    c1[0] = 7;
+  } 
+  ws_source.send(c1);
+}
+
 
 startSocket();
 

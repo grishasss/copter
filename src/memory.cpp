@@ -20,7 +20,7 @@ void MEMORY::write_bit(bool f , uint16_t pos){
 bool MEMORY::get_bit(uint16_t pos){
     uint8_t b = EEPROM.read(pos >> 3);
     uint8_t cnt_bit = 7 - pos % 8;
-    return b & (1 << cnt_bit);
+    return (bool)(b & (1 << cnt_bit));
 }
 
 void MEMORY::write_uint32(uint32_t f, uint16_t pos){
