@@ -19,7 +19,7 @@ void MATH::calc_auto(){
 
 
 void MATH::loop(){
-    real_altitude = Sensors->altitude * cos(Sensors->kren) * cos(Sensors->tangage);
+    real_altitude = float(Sensors->altitude) * cos(Sensors->kren) * cos(Sensors->tangage);
     
     switch (mode){
     case 0:

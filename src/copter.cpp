@@ -50,7 +50,7 @@ void Copter::begin(){
 
 
 void Copter::process(){
-    uint32_t start = micros();
+    uint64_t start = micros();
     web.loop();
     Log.loop();
     // math.loop();
