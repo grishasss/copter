@@ -37,9 +37,10 @@ void INIT(){
     Log.Sensors = (&sensors);
     Log.Memory = (&memory);
     math.Sensors = (&sensors);
+    math.Memory = (&memory);
 
 
-    // motors.begin();
+    motors.begin();
     web.wifi_init();
     sensors.begin();
     web.start_all_server();
