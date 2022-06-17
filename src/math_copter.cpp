@@ -14,7 +14,10 @@ void MATH::calc_acro(){
 }
 
 void MATH::calc_auto(){
-    
+    float mn_A = Gg * mass / cos(Sensors->kren) / cos(Sensors->tangage);
+    float to_3 = 4 * max_power - mn_A;
+    float to_1 = to_3 / 3;
+     
 }
 
 
@@ -39,5 +42,5 @@ void MATH::recalc_base(){
     len = Memory->get_float(14);
 
 
-    
+
 }

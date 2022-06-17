@@ -21,7 +21,7 @@ public:
     float moment_of_inertia1 = 0;
     float moment_of_inertia2 = 0;
     float len = 500;
-
+    float max_power = 0;
     
     float get_acceleration(float new_angle , float tec_angle);
     void calc_acro();
