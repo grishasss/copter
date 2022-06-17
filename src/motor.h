@@ -8,16 +8,30 @@
 #define MOTOR_3_PIN 3
 #define MOTOR_4_PIN 4
 
+#define USING_TIM_DIV1                true              // for shortest and most accurate timer
+#define USING_TIM_DIV16               false             // for medium time and medium accurate timer
+#define USING_TIM_DIV256              false
+
 class MOTORS{
     public:
-    ESP8266_PWM ISR_PWM;
+    
+    ESP8266Timer ITimer;
     MOTORS();
-    int16_t power[4];
-    
-    
-    void stop_all();
-    void stop(int8_t MOTOR_ID);
-    void set_power_to(int8_t MOTOR_ID , int16_t Power);    
-    void set_power_all(int16_t Power[]);
 
+    
+    
+
+    uint16_t power[4];
+    uint8_t PWM_Pin[4] = {1};
+    float Freq = 1000;
+    uint32_t Period = 100;
+
+    void begin();
+    void stop_all();
+    void loop();
+    
+private:
+    void IRAM_ATTR TimerHandler();
+    volatile ESP8266_PWM ISR_PWM;
+    volatile int c = 0;
 };

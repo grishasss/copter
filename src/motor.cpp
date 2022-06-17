@@ -1,23 +1,22 @@
 #include "motor.h"
-// #include "ESP8266_PWM.h"
 
 MOTORS::MOTORS(){
 
 }
-void MOTORS::stop(int8_t MOTOR_ID){
-    power[MOTOR_ID] = 0;
+
+
+void IRAM_ATTR MOTORS::TimerHandler(){
+   c++;
+}
+
+void MOTORS::begin(){
+    // if (ITimer.attachInterruptInterval(20L, std::bind(&MOTORS::TimerHandler))){
+    //     Serial.print(F("Starting ITimer OK, micros() = ")); Serial.println(micros());
+    // }
+    // else
+    //     Serial.println(F("Can't set ITimer. Select another freq. or timer"));
 }
 
 void MOTORS::stop_all(){
-
-}
-void MOTORS::set_power_to(int8_t MOTOR_ID , int16_t Power){
-    power[MOTOR_ID] = Power;
     
-}
-
-void MOTORS::set_power_all(int16_t Power[]){
-    for(int8_t i = 0; i < 4; i++){
-        set_power_to(i , Power[i]);
-    }
 }
