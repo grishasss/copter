@@ -1,22 +1,18 @@
 #include "motor.h"
 
+
+
 MOTORS::MOTORS(){
 
 }
-
-
-void IRAM_ATTR MOTORS::TimerHandler(){
-   c++;
-}
-
 void MOTORS::begin(){
-    // if (ITimer.attachInterruptInterval(20L, std::bind(&MOTORS::TimerHandler))){
-    //     Serial.print(F("Starting ITimer OK, micros() = ")); Serial.println(micros());
-    // }
-    // else
-    //     Serial.println(F("Can't set ITimer. Select another freq. or timer"));
+    for(uint8_t i = 0 ; i < 4 ; i++){
+        pinMode(PWM_Pin[i], OUTPUT);
+    }
 }
 
-void MOTORS::stop_all(){
-    
+void MOTORS::loop(){
+    for(uint8_t i = 0 ; i < 4 ; i++){
+        analogWrite(PWM_Pin[i] ,power[i]);
+    }
 }

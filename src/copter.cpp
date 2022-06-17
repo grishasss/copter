@@ -5,7 +5,7 @@
 
 
 
-// #include "math_copter.h"
+#include "math_copter.h"
 #include "web.h"
 #include "sensors.h"
 #include "motor.h"
@@ -18,13 +18,15 @@ Copter::Copter(){
 }
 
 
-String file_name; 
-SENSORS sensors;
 
+SENSORS sensors;
 LOG Log;
 MATH math;
 MEMORY memory;
 WEB  web;
+MOTORS motors;
+
+
 void INIT(){
     Serial.begin(115200);
     memory.init();
@@ -36,6 +38,8 @@ void INIT(){
     Log.Memory = (&memory);
     math.Sensors = (&sensors);
 
+
+    // motors.begin();
     web.wifi_init();
     sensors.begin();
     web.start_all_server();
@@ -56,5 +60,6 @@ void Copter::process(){
     Log.loop();
     math.loop();
     sensors.loop();
+    motors.loop();
     Serial.println(micros() - start);
 }
