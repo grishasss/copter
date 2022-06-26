@@ -195,7 +195,7 @@ function gen_file_list(){
 }
 
 function get_command(e){
-  let D = new Int8Array(e.data); 
+  let D = new Uint8Array(e.data); 
   switch (D[0]){
     case 0:
       console.log("read file name");
