@@ -198,9 +198,22 @@ void WEB::log_change_status(bool f){
 
 
 
+void WEB::reset_settings(){
+    
+}
+
+void WEB::send_settings(uint8_t client_num){
+    Serial.println("send_settings");
+    uint8_t data[2];
+    memset(data , 0 , sizeof data);
+    data[0] = 1;
+    data[1] |= ((uint8_t)Log->log_is_write << 7);
+    webSocket.sendBIN(client_num , (const uint8_t *)data , 2);
+}
+
 
  void WEB::get_command(uint8_t client_num , uint8_t * payload, size_t lenght){
-    assert(lenght);
+    // assert(lenght);
     switch (payload[0]){
     case 0:
         set_date(payload , lenght);
@@ -220,10 +233,13 @@ void WEB::log_change_status(bool f){
     case 5:
         log_change_status(0);
         break;
-    
-    
+    case 6:
+        reset_settings();
+    case 7:
+        send_settings(client_num);
+        break;
     default:
-        assert(0);
+        // assert(0);
         break;
     }
  }

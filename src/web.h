@@ -56,7 +56,8 @@ public:
     void set_status_joy(uint8_t * payload, size_t lenght);
     void set_date(uint8_t * payload, size_t lenght);
     void log_change_status(bool f);
-    
+    void reset_settings();// tmp no aviable)
+    void send_settings(uint8_t client_num);// tmp no aviable)
     void start_ota();
 };
 

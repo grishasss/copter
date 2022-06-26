@@ -62,5 +62,5 @@ void Copter::process(){
     math.loop();
     sensors.loop();
     motors.loop();
-    Serial.println(micros() - start);
+    // Serial.println(micros() - start);
 }

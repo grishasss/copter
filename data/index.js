@@ -2,16 +2,17 @@ let websocket_started = 0
 ws_source = new WebSocket('ws://' + location.hostname + ':81/', ['arduino']);
 
 
-var body = document.getElementsByTagName("body")[0];
+let body = document.getElementsByTagName("body")[0];
 let log_chbox = document.getElementById("log_chbox");
-let ota_chbox = document.getElementById("ota_chbox");
 let FILE_LIST = [];
 
 
 
 
 
+function get_param(){
 
+}
 
 function converte(file_name){
   console.log("converte: " + file_name);
@@ -94,9 +95,6 @@ function converte(file_name){
 
   };
   request.send();
-
-
-  
 }
 
 function delete_file(file_name){
@@ -216,7 +214,11 @@ function get_command(e){
       }
     gen_file_list();
     break;
-
+  case 1:
+    console.log("get settings");
+    console.log(D[1]);
+    
+    log_chbox.checked = (Boolean)(D[1] & (1 << 7)); 
   }
 }
 
@@ -250,7 +252,9 @@ function startSocket(){
 
       let c1 = new Uint8Array(1);
       c1[0] = 1;
-      ws_source.send(c1);
+      ws_source.send(c1); // get file name
+      c1[0] = 7;
+      ws_source.send(c1); // get settings
     };
 
     ws_source.onclose = function(e){
@@ -283,23 +287,22 @@ function change_status_log(){
   ws_source.send(c1);
 }
 
-function change_status_ota(){
+
+
+function reset_settings(){
   let c1 = new Uint8Array(1);
-  if(ota_chbox.checked == true){
-    console.log(1);
-    c1[0] = 6;
+  if (!confirm("Do you want reset settings?")) {
+    return;
   }
-  else{
-    console.log(0);
-    c1[0] = 7;
-  } 
+  c1[0] = 6;
   ws_source.send(c1);
 }
 
 
-startSocket();
 
-// console.log(websocket_started);
-// ws_source.send("Message");
+
+
+
+startSocket();
 
 

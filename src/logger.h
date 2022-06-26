@@ -25,7 +25,6 @@ class LOG{
     MATH* math;
     uint32_t time_last_write = 0;
     int interval = 100;
-    bool is_writing = 0;
     File file;
     bool it_big = 0;
     String file_name;
