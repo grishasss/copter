@@ -217,8 +217,8 @@ function get_command(e){
   case 1:
     console.log("get settings");
     console.log(D[1]);
-    
     log_chbox.checked = (Boolean)(D[1] & (1 << 7)); 
+    
   }
 }
 
