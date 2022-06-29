@@ -1,12 +1,5 @@
 #include "web.h"
-#include <Arduino.h>
-#include <WiFiClient.h>
-#include <WiFiServer.h>
 
-#include <WiFiUdp.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
-#include <WebSocketsServer.h>
 
 
 String getContentType(String filename){
@@ -193,7 +186,7 @@ void WEB::log_change_status(bool f){
     if(f) Serial.println("log write");
     else Serial.println("log no write");
     Log->log_is_write = f;
-    Memory->write_bit(f , 0);
+    memory_write_bit(f , 0);
 }
 
 

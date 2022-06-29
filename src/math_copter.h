@@ -8,7 +8,6 @@
 class MATH{
 public:
     SENSORS *Sensors;
-    MEMORY *Memory;
 
     MATH();
 

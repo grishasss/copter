@@ -14,7 +14,6 @@ class LOG{
     
     LOG(); 
     SENSORS *Sensors;
-    MEMORY *Memory;
     const char* header = "Date,voltage,altitude, \n";
     uint8_t line_cnt = 0;
     bool log_is_write = 1;

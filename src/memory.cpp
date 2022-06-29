@@ -1,14 +1,12 @@
-#pragma once
-
 #include "memory.h"
 
 
-void MEMORY::init(){
+void memory_init(){
     EEPROM.begin(512);
     SPIFFS.begin();
 }
 
-void MEMORY::write_bit(bool f , uint16_t pos){
+void memory_write_bit(bool f , uint16_t pos){
     uint8_t ls = EEPROM.read(pos >> 3);
     uint8_t cnt_bit = 7 - pos % 8;
     ls ^= (ls & (1 << cnt_bit));
@@ -17,13 +15,13 @@ void MEMORY::write_bit(bool f , uint16_t pos){
     EEPROM.commit();
 }
 
-bool MEMORY::get_bit(uint16_t pos){
+bool memory_get_bit(uint16_t pos){
     uint8_t b = EEPROM.read(pos >> 3);
     uint8_t cnt_bit = 7 - pos % 8;
     return (bool)(b & (1 << cnt_bit));
 }
 
-void MEMORY::write_uint32(uint32_t f, uint16_t pos){
+void memory_write_uint32(uint32_t f, uint16_t pos){
     EEPROM.write(f & ((1 << 8) - 1) , pos + 3);
     f>>=8;
     EEPROM.write(f & ((1 << 8) - 1) , pos + 2);
@@ -34,7 +32,7 @@ void MEMORY::write_uint32(uint32_t f, uint16_t pos){
     EEPROM.commit();
 }
 
-void MEMORY::write_uint16(uint16_t f, uint16_t pos){
+void memory_write_uint16(uint16_t f, uint16_t pos){
     
     EEPROM.write(f & ((1 << 8) - 1) , pos + 1);
     f>>=8;
@@ -43,29 +41,29 @@ void MEMORY::write_uint16(uint16_t f, uint16_t pos){
 }
 
 
-void MEMORY::write_float(float f, uint16_t pos){
+void memory_write_float(float f, uint16_t pos){
     uint32_t tmp;
     memcpy(&tmp, &f , sizeof f);
-    write_uint32(tmp ,pos);
+    memory_write_uint32(tmp ,pos);
 }
 
 
-float MEMORY::get_float(uint16_t pos){
-    uint32_t tmp = get_uint32(pos);
+float memory_get_float(uint16_t pos){
+    uint32_t tmp = memory_get_uint32(pos);
     float f;
     memcpy(&f  , &tmp , sizeof tmp);
     return f;
 }
 
 
-uint16_t MEMORY::get_uint16(uint16_t pos){
+uint16_t memory_get_uint16(uint16_t pos){
     uint16_t f = EEPROM.read(pos + 1);
     f |= (EEPROM.read(pos) << 8);
     return f;
 }
 
 
-uint32_t MEMORY::get_uint32(uint16_t pos){
+uint32_t memory_get_uint32(uint16_t pos){
     uint32_t f = EEPROM.read(pos + 3);
     f |= (EEPROM.read(pos + 2) << 8);
     f |= (EEPROM.read(pos + 1) << 16);

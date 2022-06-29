@@ -15,7 +15,6 @@
 #include <ESP8266WebServer.h>
 #include <WebSocketsServer.h>
 #include <ArduinoOTA.h>
-// #include <WebSocketsClient.h>
 
 
 
@@ -38,7 +37,6 @@ public:
     MATH *Math;
     LOG *Log; 
     SENSORS *Sensors;
-    MEMORY *Memory;
     // WebSocketsClient clients[max_client];
     // int8_t client_number;
     bool webSocket_it_connect;

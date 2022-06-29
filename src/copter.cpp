@@ -22,22 +22,18 @@ Copter::Copter(){
 SENSORS sensors;
 LOG Log;
 MATH math;
-MEMORY memory;
 WEB  web;
 MOTORS motors;
 
 
 void INIT(){
     Serial.begin(115200);
-    memory.init();
+    memory_init();
 
     web.Sensors = (&sensors);
     web.Log = (&Log);
-    web.Memory = (&memory);
     Log.Sensors = (&sensors);
-    Log.Memory = (&memory);
     math.Sensors = (&sensors);
-    math.Memory = (&memory);
 
 
     motors.begin();

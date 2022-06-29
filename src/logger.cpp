@@ -47,7 +47,7 @@ void LOG::open_file(){
     
 
     file_name ="/log/" + file_name + ".hex";
-    log_is_write = Memory->get_bit(0);
+    log_is_write = memory_get_bit(0);
     if(log_is_write){
         file = SPIFFS.open(file_name , "w");
         file.close();

@@ -36,10 +36,10 @@ void MATH::loop(){
 
 
 void MATH::recalc_base(){
-    mass = Memory->get_float(2);
-    moment_of_inertia1 = Memory->get_float(6);
-    moment_of_inertia2 = Memory->get_float(10);
-    len = Memory->get_float(14);
+    mass = memory_get_float(2);
+    moment_of_inertia1 = memory_get_float(6);
+    moment_of_inertia2 = memory_get_float(10);
+    len = memory_get_float(14);
 
 
 
