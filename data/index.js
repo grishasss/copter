@@ -194,6 +194,12 @@ function gen_file_list(){
   body.appendChild(tbl);
 }
 
+
+function get_data_sensors(A){
+  console.log("get data sensors");
+  
+}
+
 function get_command(e){
   let D = new Uint8Array(e.data); 
   switch (D[0]){
@@ -218,7 +224,8 @@ function get_command(e){
     console.log("get settings");
     console.log(D[1]);
     log_chbox.checked = (Boolean)(D[1] & (1 << 7)); 
-    
+  case 2:
+    get_data_sensors(D);
   }
 }
 

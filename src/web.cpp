@@ -204,6 +204,42 @@ void WEB::send_settings(uint8_t client_num){
     webSocket.sendBIN(client_num , (const uint8_t *)data , 2);
 }
 
+void WEB::send_data_sensors(uint8_t client_num){
+    uint8_t data[400];
+    data[0] = 2;
+    data[1] = (Sensors->is_lox_begin) | ((uint8_t)Sensors->is_mag_begin << 1) | ((uint8_t)Sensors->is_mpu_begin << 2);
+    int pos = 2;
+    auto write_uint32 = [&](uint32_t a){
+        data[pos++] = a & 255;
+        a>>=8;
+        data[pos++] = a & 255;
+        a>>=8;
+        data[pos++] = a & 255;
+        a>>=8;
+        data[pos++] = a & 255;
+        a>>=8;
+    };
+
+    auto write_float = [&](float a){
+        uint32_t tmp;
+        memcpy(&tmp, &a , sizeof a);
+        write_uint32(tmp);
+    };
+    write_float(Sensors->voltage);
+    write_float(Sensors->altitude);
+    
+    write_float(Sensors->tangage);
+    write_float(Sensors->v_tangage);
+    
+    write_float(Sensors->kren);
+    write_float(Sensors->v_kren);
+    
+    write_float(Sensors->yaw);
+    write_float(Sensors->v_yaw);
+
+    webSocket.sendBIN(client_num , (const uint8_t *)data , 400);
+}
+
 
  void WEB::get_command(uint8_t client_num , uint8_t * payload, size_t lenght){
     // assert(lenght);
@@ -231,6 +267,8 @@ void WEB::send_settings(uint8_t client_num){
     case 7:
         send_settings(client_num);
         break;
+    case 8:
+        send_data_sensors(client_num);
     default:
         // assert(0);
         break;

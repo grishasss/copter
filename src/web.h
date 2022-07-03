@@ -56,6 +56,7 @@ public:
     void log_change_status(bool f);
     void reset_settings();// tmp no aviable)
     void send_settings(uint8_t client_num);// tmp no aviable)
+    void send_data_sensors(uint8_t client_num);// tmp no aviable)
     void start_ota();
 };
 
