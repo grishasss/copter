@@ -43,7 +43,7 @@ bool SENSORS::start_mag(){
 }
 
 bool SENSORS::start_lox(){
-    if(mpu.begin()){
+    if(lox.begin()){
         is_lox_begin = 1;
         Serial.println("LOX is OK");
         return true;
@@ -100,6 +100,7 @@ void SENSORS::loop(){
         VL53L0X_RangingMeasurementData_t measure;
         lox.rangingTest(&measure, false);
         altitude = measure.RangeMilliMeter;
+        Serial.println(altitude);
     }
     time_last_update = millis();
     get_voltage();
