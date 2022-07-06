@@ -23,6 +23,9 @@ void SENSORS::begin(){
 }
 
 bool SENSORS::start_mpu(){
+    uint32_t st = millis();
+    while(!mpu.begin() && millis() - st < 200);
+    
     if(mpu.begin()){
         is_mpu_begin = 1;
         Serial.println("MPU is OK");
@@ -33,6 +36,9 @@ bool SENSORS::start_mpu(){
 }
 
 bool SENSORS::start_mag(){
+    uint32_t st = millis();
+    while(!mag.begin() && millis() - st < 200);
+    
     if(mag.begin()){
         is_mag_begin = 1;
         Serial.println("MAG is OK");
@@ -43,6 +49,9 @@ bool SENSORS::start_mag(){
 }
 
 bool SENSORS::start_lox(){
+    uint32_t st = millis();
+    while(!lox.begin() && millis() - st < 200);
+    
     if(lox.begin()){
         is_lox_begin = 1;
         Serial.println("LOX is OK");
@@ -81,8 +90,9 @@ void SENSORS::mpu_set_zero(){
 
 
 void SENSORS::loop(){
+    sensors_event_t a, g, temp;
     if(is_mpu_begin){
-        sensors_event_t a, g, temp;
+        
         mpu.getEvent(&a, &g, &temp);
         tangage += (v_tangage + g.gyro.x) / 2 * (millis() - time_last_update) / 1000;
         kren += (v_kren + g.gyro.y) / 2 * (millis() - time_last_update) / 1000;
@@ -90,7 +100,7 @@ void SENSORS::loop(){
         norm_angle(tangage);
         norm_angle(kren);
         norm_angle(yaw);
-        
+       
         v_tangage = g.gyro.x;
         v_kren = g.gyro.y;
         v_yaw = g.gyro.z;
@@ -100,10 +110,14 @@ void SENSORS::loop(){
         VL53L0X_RangingMeasurementData_t measure;
         lox.rangingTest(&measure, false);
         altitude = measure.RangeMilliMeter;
-        Serial.println(altitude);
+        
     }
     time_last_update = millis();
     get_voltage();
+
+    Serial.print(altitude);
+    Serial.print(" ");
+    Serial.println(temp.temperature);
 }
 
 

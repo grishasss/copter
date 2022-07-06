@@ -240,6 +240,19 @@ void WEB::send_data_sensors(uint8_t client_num){
     webSocket.sendBIN(client_num , (const uint8_t *)data , 400);
 }
 
+void WEB::reset(){
+    delay(500);
+    Serial.println("soft reset");
+    ESP.reset();
+}
+
+void WEB::reset_into_uart(){
+    delay(500);
+    Serial.println("soft reboot into uart mode");
+    ESP.rebootIntoUartDownloadMode();
+}
+
+
 
  void WEB::get_command(uint8_t client_num , uint8_t * payload, size_t lenght){
     // assert(lenght);
@@ -269,6 +282,12 @@ void WEB::send_data_sensors(uint8_t client_num){
         break;
     case 8:
         send_data_sensors(client_num);
+    case 9:
+        reset();
+        break;
+    case 10:
+        reset_into_uart();
+        break;
     default:
         // assert(0);
         break;

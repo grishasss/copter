@@ -306,6 +306,24 @@ function reset_settings(){
 }
 
 
+function soft_reboot(){
+  let c1 = new Uint8Array(1);
+  if (!confirm("Do you want reboot now?")) {
+    return;
+  }
+  c1[0] = 9;
+  ws_source.send(c1);
+}
+
+
+function soft_uart_reboot(){
+  let c1 = new Uint8Array(1);
+  if (!confirm("Do you want reboot into uart download now?")) {
+    return;
+  }
+  c1[0] = 10;
+  ws_source.send(c1);
+}
 
 
 

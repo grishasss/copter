@@ -58,5 +58,7 @@ public:
     void send_settings(uint8_t client_num);// tmp no aviable)
     void send_data_sensors(uint8_t client_num);// tmp no aviable)
     void start_ota();
+    void reset();
+    void reset_into_uart();
 };
 
