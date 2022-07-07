@@ -195,9 +195,49 @@ function gen_file_list(){
 }
 
 
-function get_data_sensors(A){
+function Get_data_sensors(D){
   console.log("get data sensors");
+  let pos = 2;
+  function uint_to_float(a){
+    let ans = 0;
+    let mantissa = (a & ((1 << 23) - 1));
+    a = (a >> 23);
+    let ex = (a & ((1 << 8) - 1)) - 127;
+    a = (a >> 8);
+    ans = Math.pow(2 , ex) * (mantissa / (1 << 23) + 1);
+    if(a) return -ans;
+    return ans;
+  }
+  function read_int32(){
+    let ans = 0;
+    ans |= (D[pos++] << 24);
+    ans |= (D[pos++] << 16);
+    ans |= (D[pos++] << 8);
+    ans |= (D[pos++]);
+    return ans;
+  }
+  function read_float(){
+    return uint_to_float(read_int32());
+  }
+  let is_lox_begin = (Boolean)(D[1] & 1);
+  let is_mag_begin = (Boolean)(D[1] & 2);
+  let is_mpu_begin = (Boolean)(D[1] & 4);
   
+  console.log(is_lox_begin);
+  console.log(is_mag_begin);
+  console.log(is_mpu_begin);
+
+  let voltage = read_float();
+  let altitude = read_int32();
+  console.log(voltage);
+  console.log(altitude);
+
+  if(is_lox_begin){
+    document.getElementById("altitide_screen").textContent = altitude;
+  }
+  else {
+    document.getElementById("altitide_screen").textContent = "lox no connected";
+  }
 }
 
 function get_command(e){
@@ -224,8 +264,10 @@ function get_command(e){
     console.log("get settings");
     console.log(D[1]);
     log_chbox.checked = (Boolean)(D[1] & (1 << 7)); 
+    break;
   case 2:
-    get_data_sensors(D);
+    Get_data_sensors(D);
+    break;
   }
 }
 
@@ -330,4 +372,12 @@ function soft_uart_reboot(){
 
 startSocket();
 
+function get_data_sensors(){
+  if(!websocket_started) return;
+  let c1 = new Uint8Array(1);
+  c1[0] = 8;
+  ws_source.send(c1);
+}
 
+
+setInterval(get_data_sensors , 600);

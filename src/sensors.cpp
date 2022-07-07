@@ -29,6 +29,9 @@ bool SENSORS::start_mpu(){
     if(mpu.begin()){
         is_mpu_begin = 1;
         Serial.println("MPU is OK");
+        mpu.setAccelerometerRange(MPU6050_RANGE_16_G);
+        mpu.setGyroRange(MPU6050_RANGE_250_DEG);
+        mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
         return true;
     }
     Serial.println("MPU is FAILD");
@@ -55,6 +58,8 @@ bool SENSORS::start_lox(){
     if(lox.begin()){
         is_lox_begin = 1;
         Serial.println("LOX is OK");
+        // lox.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
+        lox.setMeasurementTimingBudgetMicroSeconds((uint32_t)1e4);
         return true;
     }
     Serial.println("LOX is FAILD");
@@ -64,7 +69,7 @@ bool SENSORS::start_lox(){
 void SENSORS::get_voltage(){
     if(millis() - time_last_voltage < 90) return;
     time_last_voltage = millis();
-    voltage = analogRead(A0) / 1024 * (R1 + R2) / R2;    
+    voltage = analogRead(A0) /  (float)1024 * (R1 + R2) / R2;    
 }
 void SENSORS::mpu_set_zero(){
     sensors_event_t a, g, temp;
@@ -108,9 +113,10 @@ void SENSORS::loop(){
     
     if(is_lox_begin){
         VL53L0X_RangingMeasurementData_t measure;
-        lox.rangingTest(&measure, false);
-        altitude = measure.RangeMilliMeter;
-        
+        if(measure.RangeStatus != 4){
+            lox.rangingTest(&measure, false);
+            altitude = measure.RangeMilliMeter;
+        }
     }
     time_last_update = millis();
     get_voltage();
