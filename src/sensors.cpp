@@ -121,9 +121,9 @@ void SENSORS::loop(){
     time_last_update = millis();
     get_voltage();
 
-    Serial.print(altitude);
-    Serial.print(" ");
-    Serial.println(temp.temperature);
+    // Serial.print(altitude);
+    // Serial.print(" ");
+    // Serial.println(temp.temperature);
 }
 
 

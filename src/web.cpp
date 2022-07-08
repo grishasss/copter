@@ -157,7 +157,8 @@ void WEB::wifi_init(){
     if(find_home){
         WiFi.mode(WIFI_STA);
         long start_time = millis();
-        while(!WiFi.begin(HOME_SSID , HOME_PASSWORD) && millis() - start_time < TIME_ON_CONNECT) {
+        WiFi.begin(HOME_SSID , HOME_PASSWORD);
+        while(WiFi.status() != WL_CONNECTED && millis() - start_time < TIME_ON_CONNECT) {
             delay(250);
             Serial.println("TRY");
             }
