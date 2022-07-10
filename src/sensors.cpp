@@ -20,6 +20,8 @@ void SENSORS::begin(){
     start_mpu();
     start_mag();
     start_lox();
+    mpu_set_zero();
+    mpu_calibrate();
 }
 
 bool SENSORS::start_mpu(){
@@ -30,8 +32,8 @@ bool SENSORS::start_mpu(){
         is_mpu_begin = 1;
         Serial.println("MPU is OK");
         mpu.setAccelerometerRange(MPU6050_RANGE_16_G);
-        mpu.setGyroRange(MPU6050_RANGE_250_DEG);
-        mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+        mpu.setGyroRange(MPU6050_RANGE_500_DEG);
+        mpu.setFilterBandwidth(MPU6050_BAND_260_HZ);
         return true;
     }
     Serial.println("MPU is FAILD");
@@ -71,44 +73,85 @@ void SENSORS::get_voltage(){
     time_last_voltage = millis();
     voltage = analogRead(A0) /  (float)1024 * (R1 + R2) / R2;    
 }
-void SENSORS::mpu_set_zero(){
+void SENSORS::mpu_set_zero(uint16_t cnt, uint16_t interval){
+
+    if(!is_mpu_begin) return;
+    Serial.println("start set zero");
     sensors_event_t a, g, temp;
     float srX = 0 , srY  = 0;
-    for(int count = 0 ; count < num_set_zero ; count++){
+    for(int i = 0 ; i < cnt ; i++){
         mpu.getEvent(&a, &g, &temp);
         srX+=a.acceleration.x;
         srY+=a.acceleration.y;
-        delay(150);
+        delay(interval);
     }
-    srX /= num_set_zero;
-    srY /= num_set_zero;
+    srX /= cnt;
+    srY /= cnt;
     tangage = acos(srX / Gg) - pi / 2;
     kren = acos(srY / Gg) - pi / 2;
     yaw = 0;
-    time_last_update = millis();
+    time_last_update = micros();
     v_kren = g.gyro.y;
     v_tangage = g.gyro.x;
     v_yaw = g.gyro.z;
+
+    Serial.println("OK");
+    Serial.print("tangage: ");
+    Serial.println(tangage);
+    Serial.print("kren: ");
+    Serial.println(kren);
 }
 
 
+void SENSORS::mpu_calibrate(uint16_t cnt , uint16_t interval){
+    if(!is_mpu_begin) return;
+    float srX = 0, srY = 0 , srZ = 0;
+    Serial.println("start calibrate");
+    sensors_event_t a, g, temp;
+    for(int i = 0 ; i < cnt ; i++){
+        mpu.getEvent(&a, &g, &temp);
+        srX+=g.gyro.x;
+        srY+=g.gyro.y;
+        srZ+=g.gyro.z;
+        delay(interval);
+    }
+    errX = srX / cnt;
+    errY = srY / cnt;
+    errZ = srZ / cnt;
+
+    Serial.println("OK");
+    Serial.print("errX: ");
+    Serial.println(errX);
+    
+    Serial.print("errY: ");
+    Serial.println(errY);
+    
+    Serial.print("errZ: ");
+    Serial.println(errZ);
+}
+    
 
 
 void SENSORS::loop(){
-    sensors_event_t a, g, temp;
+    sensors_event_t a, g, temp; 
     if(is_mpu_begin){
         
         mpu.getEvent(&a, &g, &temp);
-        tangage += (v_tangage + g.gyro.x) / 2 * (millis() - time_last_update) / 1000;
-        kren += (v_kren + g.gyro.y) / 2 * (millis() - time_last_update) / 1000;
-        yaw += (v_yaw + g.gyro.z) / 2 * (millis() - time_last_update) / 1000;
-        norm_angle(tangage);
-        norm_angle(kren);
-        norm_angle(yaw);
+        tangage += (v_tangage + g.gyro.x - errX) / 2 * (micros() - time_last_update) / 1e5;
+        kren += (v_kren + g.gyro.y - errY) / 2 * (micros() - time_last_update) / 1e5;
+        yaw += (v_yaw + g.gyro.z - errZ) / 2 * (micros() - time_last_update) / 1e5;
+        // norm_angle(tangage);
+        // norm_angle(kren);
+        // norm_angle(yaw);
        
-        v_tangage = g.gyro.x;
-        v_kren = g.gyro.y;
-        v_yaw = g.gyro.z;
+        v_tangage = g.gyro.x - errX;
+        v_kren = g.gyro.y - errY;
+        v_yaw = g.gyro.z - errZ;
+        
+        // v_tangage = 0;
+        // v_kren = 0;
+        // v_yaw = 0;
+
     }
     
     if(is_lox_begin){
@@ -118,11 +161,28 @@ void SENSORS::loop(){
             altitude = measure.RangeMilliMeter;
         }
     }
-    time_last_update = millis();
+    time_last_update = micros();
     get_voltage();
-
-    // Serial.print(altitude);
+    
+    // Serial.print(g.gyro.x);
     // Serial.print(" ");
+    // Serial.print(g.gyro.y);
+    // Serial.print(" ");
+    // Serial.println(g.gyro.z);
+    // Serial.print(" ");
+    // Serial.print(a.acceleration.x);
+    // Serial.print(" ");
+    // Serial.println(a.acceleration.y);
+    // Serial.print(" ");
+
+
+    Serial.print(tangage);
+    Serial.print(" ");
+    Serial.print(kren);
+    Serial.print(" ");
+    Serial.println(yaw);
+    // Serial.println(" ");
+
     // Serial.println(temp.temperature);
 }
 
