@@ -223,14 +223,28 @@ function Get_data_sensors(D){
   let is_mag_begin = (Boolean)(D[1] & 2);
   let is_mpu_begin = (Boolean)(D[1] & 4);
   
-  console.log(is_lox_begin);
-  console.log(is_mag_begin);
-  console.log(is_mpu_begin);
+  // console.log(is_lox_begin);
+  // console.log(is_mag_begin);
+  // console.log(is_mpu_begin);
 
   let voltage = read_float();
   let altitude = read_int32();
-  console.log(voltage);
-  console.log(altitude);
+  let tangage = read_float();
+  let v_tangage = read_float();
+  
+  let kren = read_float();
+  let v_kren = read_float();
+  
+  let yaw = read_float();
+  let v_yaw = read_float();
+
+  console.log(tangage);
+  console.log(kren);
+  console.log(yaw);
+  
+
+  // console.log(voltage);
+  // console.log(altitude);
 
   if(is_lox_begin){
     document.getElementById("altitide_screen").textContent = altitude;
