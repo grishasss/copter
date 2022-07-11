@@ -7,8 +7,8 @@
 #include "Adafruit_VL53L0X.h"
 
 void  SENSORS::norm_angle(float &angle){
-    while(angle < 0) angle+=2*pi;
-    while(angle > 2*pi) angle-=2*pi;
+    while(angle < -pi) angle+=2*pi;
+    while(angle > pi) angle-=2*pi;
 }
 
 SENSORS::SENSORS() : mag(12345){
@@ -31,9 +31,9 @@ bool SENSORS::start_mpu(){
     if(mpu.begin()){
         is_mpu_begin = 1;
         Serial.println("MPU is OK");
-        mpu.setAccelerometerRange(MPU6050_RANGE_16_G);
-        mpu.setGyroRange(MPU6050_RANGE_500_DEG);
-        mpu.setFilterBandwidth(MPU6050_BAND_260_HZ);
+        mpu.setAccelerometerRange(MPU6050_RANGE_4_G);
+        mpu.setGyroRange(MPU6050_RANGE_2000_DEG);
+        // mpu.setFilterBandwidth(MPU6050_BAND_260_HZ);
         return true;
     }
     Serial.println("MPU is FAILD");
@@ -137,12 +137,12 @@ void SENSORS::loop(){
     if(is_mpu_begin){
         
         mpu.getEvent(&a, &g, &temp);
-        tangage += (v_tangage + g.gyro.x - errX) / 2 * (micros() - time_last_update) / 1e5;
-        kren += (v_kren + g.gyro.y - errY) / 2 * (micros() - time_last_update) / 1e5;
-        yaw += (v_yaw + g.gyro.z - errZ) / 2 * (micros() - time_last_update) / 1e5;
-        // norm_angle(tangage);
-        // norm_angle(kren);
-        // norm_angle(yaw);
+        tangage += (v_tangage + g.gyro.x - errX)  * (micros() - time_last_update) / 2e6;
+        kren += (v_kren + g.gyro.y - errY) * (micros() - time_last_update) / 2e6;
+        yaw += (v_yaw + g.gyro.z - errZ) * (micros() - time_last_update) / 2e6;
+        norm_angle(tangage);
+        norm_angle(kren);
+        norm_angle(yaw);
        
         v_tangage = g.gyro.x - errX;
         v_kren = g.gyro.y - errY;

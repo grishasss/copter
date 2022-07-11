@@ -245,12 +245,25 @@ function Get_data_sensors(D){
 
   // console.log(voltage);
   // console.log(altitude);
-
+  document.getElementById("voltage_screen").textContent = "voltage: " + voltage.toFixed(2);
+  
+  
   if(is_lox_begin){
-    document.getElementById("altitide_screen").textContent = altitude;
+    document.getElementById("altitide_screen").textContent = "altitude :" + altitude.toFixed(2);
   }
   else {
     document.getElementById("altitide_screen").textContent = "lox no connected";
+  }
+
+  if(is_mpu_begin){
+    document.getElementById("yaw_screen").textContent = "yaw: " + yaw.toFixed(2);
+    document.getElementById("kren_screen").textContent = "kren: " + kren.toFixed(2);
+    document.getElementById("tangage_screen").textContent = "tangage: " + tangage.toFixed(2);
+  }
+  else {
+    document.getElementById("yaw_screen").textContent = "mpu no connected";
+    document.getElementById("kren_screen").textContent = "mpu no connected";
+    document.getElementById("tangage_screen").textContent = "mpu no connected";
   }
 }
 
