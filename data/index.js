@@ -407,4 +407,4 @@ function get_data_sensors(){
 }
 
 
-setInterval(get_data_sensors , 600);
+setInterval(get_data_sensors , 200);

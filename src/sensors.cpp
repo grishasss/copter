@@ -154,7 +154,7 @@ void SENSORS::loop(){
 
     }
     
-    if(is_lox_begin){
+    if(0){
         VL53L0X_RangingMeasurementData_t measure;
         if(measure.RangeStatus != 4){
             lox.rangingTest(&measure, false);
