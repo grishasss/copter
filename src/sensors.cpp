@@ -1,11 +1,6 @@
 #include "sensors.h"
 
 
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_HMC5883_U.h>
-#include "Adafruit_VL53L0X.h"
-
 void  SENSORS::norm_angle(float &angle){
     while(angle < -pi) angle+=2*pi;
     while(angle > pi) angle-=2*pi;
@@ -17,6 +12,7 @@ SENSORS::SENSORS() : mag(12345){
 
 void SENSORS::begin(){
     pinMode(A0, INPUT);
+    Wire.begin();
     start_mpu();
     start_mag();
     start_lox();
@@ -154,10 +150,10 @@ void SENSORS::loop(){
 
     }
     
-    if(0){
+    if(is_lox_begin){
         VL53L0X_RangingMeasurementData_t measure;
+        lox.rangingTest(&measure, false);
         if(measure.RangeStatus != 4){
-            lox.rangingTest(&measure, false);
             altitude = measure.RangeMilliMeter;
         }
     }
