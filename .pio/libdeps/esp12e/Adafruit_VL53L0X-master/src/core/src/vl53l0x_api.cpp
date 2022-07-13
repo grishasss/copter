@@ -2043,6 +2043,8 @@ VL53L0X_Error VL53L0X_CheckAndLoadInterruptSettings(VL53L0X_DEV Dev,
 }
 
 VL53L0X_Error VL53L0X_StartMeasurement(VL53L0X_DEV Dev) {
+  uint32_t KEK = micros();
+
   VL53L0X_Error Status = VL53L0X_ERROR_NONE;
   VL53L0X_DeviceModes DeviceMode;
   uint8_t Byte;
@@ -2116,6 +2118,8 @@ VL53L0X_Error VL53L0X_StartMeasurement(VL53L0X_DEV Dev) {
   }
 
   LOG_FUNCTION_END(Status);
+  Serial.print("all: ");
+  Serial.println(micros() - KEK);
   return Status;
 }
 
@@ -2191,6 +2195,7 @@ VL53L0X_Error VL53L0X_WaitDeviceReadyForNewMeasurement(VL53L0X_DEV Dev,
 VL53L0X_Error VL53L0X_GetRangingMeasurementData(
     VL53L0X_DEV Dev,
     VL53L0X_RangingMeasurementData_t *pRangingMeasurementData) {
+  
   VL53L0X_Error Status = VL53L0X_ERROR_NONE;
   uint8_t DeviceRangeStatus;
   uint8_t RangeFractionalEnable;
@@ -2214,30 +2219,44 @@ VL53L0X_Error VL53L0X_GetRangingMeasurementData(
    * start reading at 0x14 dec20
    * end reading at 0x21 dec33 total 14 bytes to read
    */
+  uint32_t kek = micros();
   Status = VL53L0X_ReadMulti(Dev, 0x14, localBuffer, 12);
-
+  Serial.print(String(__LINE__)  +": ");
+  Serial.println(micros() - kek);
+  
   if (Status == VL53L0X_ERROR_NONE) {
 
     pRangingMeasurementData->ZoneId = 0;    /* Only one zone */
     pRangingMeasurementData->TimeStamp = 0; /* Not Implemented */
-
+    kek = micros();
     tmpuint16 = VL53L0X_MAKEUINT16(localBuffer[11], localBuffer[10]);
+    Serial.print(String(__LINE__) +": ");
+    Serial.println(micros() - kek);
+
     /* cut1.1 if SYSTEM__RANGE_CONFIG if 1 range is 2bits fractional
      *(format 11.2) else no fractional
      */
 
     pRangingMeasurementData->MeasurementTimeUsec = 0;
-
-    SignalRate = VL53L0X_FIXPOINT97TOFIXPOINT1616(
-        VL53L0X_MAKEUINT16(localBuffer[7], localBuffer[6]));
+    kek = micros();
+    SignalRate = VL53L0X_FIXPOINT97TOFIXPOINT1616(VL53L0X_MAKEUINT16(localBuffer[7], localBuffer[6]));
+    Serial.print(String(__LINE__) + ": ");
+    Serial.println(micros() - kek);
     /* peak_signal_count_rate_rtn_mcps */
     pRangingMeasurementData->SignalRateRtnMegaCps = SignalRate;
 
-    AmbientRate = VL53L0X_MAKEUINT16(localBuffer[9], localBuffer[8]);
-    pRangingMeasurementData->AmbientRateRtnMegaCps =
-        VL53L0X_FIXPOINT97TOFIXPOINT1616(AmbientRate);
 
+    kek = micros();
+    AmbientRate = VL53L0X_MAKEUINT16(localBuffer[9], localBuffer[8]);
+    Serial.print(String(__LINE__) + ": ");
+    Serial.println(micros() - kek );
+
+    pRangingMeasurementData->AmbientRateRtnMegaCps =
+        VL53L0X_FIXPOINT97TOFIXPOINT1616(AmbientRate);    
+    kek = micros();
     EffectiveSpadRtnCount = VL53L0X_MAKEUINT16(localBuffer[3], localBuffer[2]);
+    Serial.print(String(__LINE__) + ": ");
+    Serial.println(micros() - kek);
     /* EffectiveSpadRtnCount is 8.8 format */
     pRangingMeasurementData->EffectiveSpadRtnCount = EffectiveSpadRtnCount;
 
@@ -2327,6 +2346,7 @@ VL53L0X_Error VL53L0X_GetRangingMeasurementData(
   }
 
   LOG_FUNCTION_END(Status);
+  
   return Status;
 }
 
