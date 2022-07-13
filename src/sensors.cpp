@@ -56,8 +56,8 @@ bool SENSORS::start_lox(){
     if(lox.begin()){
         is_lox_begin = 1;
         Serial.println("LOX is OK");
-        // lox.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_ACCURACY);
-        lox.setMeasurementTimingBudgetMicroSeconds((uint32_t)1e4);
+        lox.configSensor(Adafruit_VL53L0X::VL53L0X_SENSE_HIGH_SPEED);
+        // lox.setMeasurementTimingBudgetMicroSeconds((uint32_t)1e4);
         return true;
     }
     Serial.println("LOX is FAILD");
