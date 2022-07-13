@@ -20,6 +20,7 @@ void MOTORS::loop(){
 
 void MOTORS::stop_all(){
     is_on = false;
+    
     for(uint8_t i = 0 ; i < 4 ; i++){
         analogWrite(PWM_Pin[i] ,0);
     }
